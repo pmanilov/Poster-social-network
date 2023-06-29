@@ -25,7 +25,8 @@ public class User {
 
     private String email;
 
-
+    @ManyToMany(mappedBy = "likedBy")
+    private List<Post> likedPosts;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -41,4 +42,7 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 }
