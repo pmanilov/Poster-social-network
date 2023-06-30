@@ -1,7 +1,9 @@
 package com.poster.controller;
 
+import com.poster.exception.PostNotFoundException;
 import com.poster.model.Post;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.poster.service.PostService;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,13 +12,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/posts")
+@AllArgsConstructor
 public class PostController {
-    private final PostService postService;
 
-    @Autowired
-    public PostController(PostService postService) {
-        this.postService = postService;
-    }
+    private final PostService postService;
 
     @GetMapping
     public ResponseEntity<List<Post>> getAllPosts() {
@@ -27,20 +26,12 @@ public class PostController {
     @GetMapping("/{postId}")
     public ResponseEntity<Post> getPostById(@PathVariable Long postId) {
         Post post = postService.getPostById(postId);
-        if (post != null) {
-            return ResponseEntity.ok(post);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(post);
     }
     @GetMapping("/user/{userId}")
-    public ResponseEntity<Post> getPostByUserId(@PathVariable Long userId) {
-        Post post = postService.getPostByUserId(userId);
-        if (post != null) {
-            return ResponseEntity.ok(post);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<List<Post>> getPostByUserId(@PathVariable Long userId) {
+        List<Post> posts = postService.getPostByUserId(userId);
+        return ResponseEntity.ok(posts);
     }
 
     @PostMapping("/create")
@@ -50,25 +41,19 @@ public class PostController {
     }
 
     @PutMapping("/edit/{postId}")
-    public ResponseEntity<Post> updatePost(@PathVariable Long postId, @RequestBody Post updatedPost) {
-        Post post = postService.getPostById(postId);
-        if (post != null) {
-            updatedPost.setId(postId);
-            Post savedPost = postService.updatePost(updatedPost);
-            return ResponseEntity.ok(savedPost);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Post> updatePost(@PathVariable Long postId, @RequestBody String text) {
+        Post savedPost = postService.updatePost(postId, text);
+        return ResponseEntity.ok(savedPost);
     }
 
     @DeleteMapping("/delete/{postId}")
     public ResponseEntity<Void> deletePost(@PathVariable Long postId) {
-        Post post = postService.getPostById(postId);
-        if (post != null) {
-            postService.deletePost(postId);
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        postService.deletePost(postId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @ExceptionHandler(PostNotFoundException.class)
+    public ResponseEntity<String> handlePostNotFoundException(PostNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 }
