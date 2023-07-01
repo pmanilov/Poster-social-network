@@ -2,9 +2,9 @@ package com.poster.model;
 
 
 import jakarta.persistence.*;
-import lombok.Generated;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -22,7 +22,7 @@ public class User {
     private Long id;
 
     private String username;
-
+    private String password;
     private String email;
 
 
