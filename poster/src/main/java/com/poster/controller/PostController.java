@@ -1,5 +1,6 @@
 package com.poster.controller;
 
+import com.poster.dto.PostDto;
 import com.poster.model.Post;
 import com.poster.service.PostService;
 import jakarta.validation.Valid;
@@ -18,26 +19,26 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping
-    public ResponseEntity<List<Post>> getAllPosts() {
+    public ResponseEntity<List<PostDto>> getAllPosts() {
         return ResponseEntity.ok(postService.getAllPosts());
     }
 
     @GetMapping("/{postId}")
-    public ResponseEntity<Post> getPostById(@PathVariable Long postId) {
+    public ResponseEntity<PostDto> getPostById(@PathVariable Long postId) {
         return ResponseEntity.ok(postService.getPostById(postId));
     }
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Post>> getPostByUserId(@PathVariable Long userId) {
+    public ResponseEntity<List<PostDto>> getPostByUserId(@PathVariable Long userId) {
         return ResponseEntity.ok(postService.getPostByUserId(userId));
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Post> createPost(@Valid @RequestBody Post post) {
+    public ResponseEntity<PostDto> createPost(@Valid @RequestBody Post post) {
         return ResponseEntity.status(HttpStatus.CREATED).body(postService.createPost(post));
     }
 
     @PutMapping("/edit/{postId}")
-    public ResponseEntity<Post> updatePost(@PathVariable Long postId, @Valid @RequestBody String text) {
+    public ResponseEntity<PostDto> updatePost(@PathVariable Long postId, @Valid @RequestBody String text) {
         return ResponseEntity.ok(postService.updatePost(postId, text));
     }
 

@@ -1,5 +1,6 @@
 package com.poster.controller;
 
+import com.poster.dto.CommentDto;
 import com.poster.model.Comment;
 import com.poster.service.CommentService;
 import jakarta.validation.Valid;
@@ -18,21 +19,21 @@ public class CommentController {
     private final CommentService commentService;
 
     @GetMapping("/{commentId}")
-    public ResponseEntity<Comment> getCommentById(@PathVariable Long commentId) {
+    public ResponseEntity<CommentDto> getCommentById(@PathVariable Long commentId) {
         return ResponseEntity.ok(commentService.getCommentById(commentId));
     }
     @GetMapping("/post/{postId}")
-    public ResponseEntity<List<Comment>> getCommentByPostId(@PathVariable Long postId) {
+    public ResponseEntity<List<CommentDto>> getCommentByPostId(@PathVariable Long postId) {
         return ResponseEntity.ok(commentService.getCommentByPostId(postId));
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Comment> createComment(@Valid @RequestBody Comment comment) {
+    public ResponseEntity<CommentDto> createComment(@Valid @RequestBody Comment comment) {
         return ResponseEntity.status(HttpStatus.CREATED).body(commentService.createComment(comment));
     }
 
     @PutMapping("/edit/{commentId}")
-    public ResponseEntity<Comment> updateComment(@PathVariable Long commentId, @Valid @RequestBody String text) {
+    public ResponseEntity<CommentDto> updateComment(@PathVariable Long commentId, @Valid @RequestBody String text) {
         return ResponseEntity.ok(commentService.updateComment(commentId, text));
     }
 

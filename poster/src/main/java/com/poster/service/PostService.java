@@ -1,13 +1,17 @@
 package com.poster.service;
 
+import com.poster.dto.PostDto;
+import com.poster.dto.UserShortInfo;
 import com.poster.exception.PostNotFoundException;
 import com.poster.model.Post;
+import com.poster.model.User;
 import com.poster.repository.PostRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -15,35 +19,54 @@ public class PostService {
 
     private final PostRepository postRepository;
 
-    public List<Post> getAllPosts() {
-        return postRepository.findAll();
+    public List<PostDto> getAllPosts() {
+        return postRepository.findAll().stream().map(this::convertPostToDto).collect(Collectors.toList());
     }
-    public List<Post> getPostByUserId(Long userId) {
-        return postRepository.findAllByUserId(userId);
+    public List<PostDto> getPostByUserId(Long userId) {
+        return postRepository.findAllByUserId(userId).stream().map(this::convertPostToDto).collect(Collectors.toList());
     }
-    public Post createPost(Post post) {
-        return postRepository.save(post);
+    public PostDto createPost(Post post) {
+        return this.convertPostToDto(postRepository.save(post));
     }
     public void deletePost(Long id) {
         postRepository.deleteById(id);
     }
-    public Post updatePost(Long id, String text) {
+    public PostDto updatePost(Long id, String text) {
         Optional<Post> postOptional = postRepository.findById(id);
         if(postOptional.isPresent()){
             Post post = postOptional.get();
             post.setText(text);
-            return postRepository.save(post);
+            return this.convertPostToDto(postRepository.save(post));
         }
         else {
             throw new PostNotFoundException("The post with ID " + id + " does not exist");
         }
     }
 
-    public Post getPostById(Long id) {
+    public PostDto getPostById(Long id) {
         Optional<Post> postOptional = postRepository.findById(id);
         if(postOptional.isPresent()) {
-            return postOptional.get();
+            return this.convertPostToDto(postOptional.get());
         }
         else throw new PostNotFoundException("The post with ID " + id + " does not exist");
+    }
+
+    private PostDto convertPostToDto(Post post){
+        return PostDto.builder()
+                .id(post.getId())
+                .text(post.getText())
+                .date(post.getDate())
+                .user(this.convertUserToShortInfo(post.getUser()))
+                .amountOfComments(post.getComments().size())
+                .likedBy(post.getLikedBy().stream().map(this::convertUserToShortInfo).collect(Collectors.toSet()))
+                .amountOfLikes(post.getLikedBy().size())
+                .build();
+    }
+
+    private UserShortInfo convertUserToShortInfo(User user){
+        return UserShortInfo.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .build();
     }
 }
