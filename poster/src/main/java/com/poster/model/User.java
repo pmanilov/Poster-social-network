@@ -2,6 +2,7 @@ package com.poster.model;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,8 +22,14 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
+    @Size(min = 4, max = 20, message = "Username should be between 4 and 20 characters")
     private String username;
+    @NotBlank(message = "Password can't be empty")
     private String password;
+
+    @Column(unique = true)
+    @Email(message = "Email is required")
     private String email;
     private String about;
 

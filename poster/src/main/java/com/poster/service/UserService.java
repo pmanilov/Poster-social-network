@@ -4,14 +4,13 @@ import com.poster.dto.UserDto;
 import com.poster.dto.UserShortInfo;
 import com.poster.model.User;
 import com.poster.repository.UserRepository;
-import com.poster.secutiry.JwtHelper;
+import com.poster.secutiry.model.SecurityUser;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.mapping.callback.ReactiveEntityCallbacks;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,7 +18,6 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtHelper jwtHelper;
 
     public User createUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -39,23 +37,37 @@ public class UserService {
                 .getFollowers().stream().map(this::convertUserToShortInfo).collect(Collectors.toList());
     }
 
-    public List<UserShortInfo> getUserFollowing(Long userId) {
+    public List<UserShortInfo> getFollowedUsers(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new RuntimeException(("User not found!")))
                 .getFollowing().stream().map(this::convertUserToShortInfo).collect(Collectors.toList());
     }
 
-    public void follow(String userToken, Long followingUserId){
-       /* User followingUser = userRepository.findById(followingUserId)
-                .orElseThrow(() -> new RuntimeException("Can't follow because following user is not found!!"));
-        User follower = userRepository.findByEmail(jwtHelper
-                .getUsernameFromToken(jwtHelper.injectTokenFromAuthorization(userToken)))
-                .orElseThrow(() -> new RuntimeException("Wrong authorization info"));
-        Set<User> followingUserFollowers = followingUser.getFollowers();
-        followingUserFollowers.add(follower);*/
+    public void follow(Long targetUserId) {
+        User user = getAuthorizedUser();
+        if (user.getId().equals(targetUserId)){
+            throw new RuntimeException("Id's are equals. You can't subscribe to yourself!");
+        }
+        User targetUser = userRepository.findById(targetUserId).orElseThrow(() -> new RuntimeException("Can't find user to subscribe"));
+
+        if (userRepository.isUserSubscribed(user.getId(), targetUserId)) {
+            throw new RuntimeException("You are already subscribed");
+        }
+        userRepository.addSubscription(user.getId(), targetUser.getId());
 
     }
 
-    private UserDto convertUserToDto(User user){
+    public void unfollow(Long targetUserId) {
+        User user = getAuthorizedUser();
+        userRepository.unSubscribe(user.getId(), targetUserId);
+    }
+
+    public User getAuthorizedUser() {
+        SecurityUser securityUser = (SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userRepository.findByEmail(securityUser.getUsername())
+                .orElseThrow(() -> new RuntimeException("Wrong authorization info"));
+    }
+
+    private UserDto convertUserToDto(User user) {
         return UserDto.builder()
                 .id(user.getId())
                 .username(user.getUsername())
@@ -66,8 +78,7 @@ public class UserService {
                 .build();
     }
 
-
-    private UserShortInfo convertUserToShortInfo(User user){
+    private UserShortInfo convertUserToShortInfo(User user) {
         return UserShortInfo.builder()
                 .id(user.getId())
                 .username(user.getUsername())

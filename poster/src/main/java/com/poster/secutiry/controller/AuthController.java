@@ -6,6 +6,7 @@ import com.poster.secutiry.model.JwtRequest;
 import com.poster.secutiry.model.JwtResponse;
 import com.poster.secutiry.service.CustomUserDetailsService;
 import com.poster.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,7 +57,7 @@ public class AuthController {
     }
 
     @PostMapping("/create-user")
-    public User createUser(@RequestBody User user){
+    public User createUser(@RequestBody @Valid User user){
         return userService.createUser(user);
     }
 }
