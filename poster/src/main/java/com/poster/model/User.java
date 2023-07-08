@@ -1,6 +1,10 @@
 package com.poster.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
@@ -33,7 +37,8 @@ public class User {
     private String email;
     private String about;
 
-
+    @ManyToMany(mappedBy = "likedBy")
+    private List<Post> likedPosts;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -49,4 +54,7 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 }
