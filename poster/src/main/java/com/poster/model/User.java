@@ -6,9 +6,10 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import lombok.Generated;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -25,9 +26,16 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
+    @Size(min = 4, max = 20, message = "Username should be between 4 and 20 characters")
     private String username;
+    @NotBlank(message = "Password can't be empty")
+    private String password;
 
+    @Column(unique = true)
+    @Email(message = "Email is required")
     private String email;
+    private String about;
 
     @ManyToMany(mappedBy = "likedBy")
     private List<Post> likedPosts;
