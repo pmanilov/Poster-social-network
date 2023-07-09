@@ -38,13 +38,19 @@ public class PostController {
     }
 
     @PutMapping("/edit/{postId}")
-    public ResponseEntity<PostDto> updatePost(@PathVariable Long postId, @Valid @RequestBody String text) {
-        return ResponseEntity.ok(postService.updatePost(postId, text));
+    public ResponseEntity<PostDto> updatePost(@PathVariable Long postId, @Valid  @RequestBody Post post) {
+        return ResponseEntity.ok(postService.updatePost(postId, post));
     }
 
     @DeleteMapping("/delete/{postId}")
     public ResponseEntity<Void> deletePost(@PathVariable Long postId) {
         postService.deletePost(postId);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/like/{postId}")
+    public ResponseEntity<Void> likePost(@PathVariable Long postId) {
+        postService.like(postId);
+        return ResponseEntity.ok().build();
     }
 }

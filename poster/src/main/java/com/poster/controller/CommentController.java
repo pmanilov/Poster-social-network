@@ -33,8 +33,8 @@ public class CommentController {
     }
 
     @PutMapping("/edit/{commentId}")
-    public ResponseEntity<CommentDto> updateComment(@PathVariable Long commentId, @Valid @RequestBody String text) {
-        return ResponseEntity.ok(commentService.updateComment(commentId, text));
+    public ResponseEntity<CommentDto> updateComment(@PathVariable Long commentId, @Valid @RequestBody Comment comment) {
+        return ResponseEntity.ok(commentService.updateComment(commentId, comment));
     }
 
     @DeleteMapping("/delete/{commentId}")

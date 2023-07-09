@@ -22,6 +22,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
+    @ExceptionHandler(UserActionRestrictedException.class)
+    public ResponseEntity<String> handleUserActionRestrictedException(UserActionRestrictedException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity handleValidationException(MethodArgumentNotValidException ex) {
         List<String> errors = ex.getBindingResult()
