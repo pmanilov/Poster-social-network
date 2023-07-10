@@ -3,12 +3,14 @@ package com.poster.service;
 import com.poster.dto.PostDto;
 import com.poster.dto.UserShortInfo;
 import com.poster.exception.PostNotFoundException;
+import com.poster.exception.UserActionRestrictedException;
 import com.poster.model.Post;
 import com.poster.model.User;
 import com.poster.repository.PostRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -18,6 +20,7 @@ import java.util.stream.Collectors;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final UserService userService;
 
     public List<PostDto> getAllPosts() {
         return postRepository.findAll().stream().map(this::convertPostToDto).collect(Collectors.toList());
@@ -26,29 +29,64 @@ public class PostService {
         return postRepository.findAllByUserId(userId).stream().map(this::convertPostToDto).collect(Collectors.toList());
     }
     public PostDto createPost(Post post) {
+        post.setUser(userService.getAuthorizedUser());
+        post.setDate(LocalDateTime.now());
         return this.convertPostToDto(postRepository.save(post));
     }
-    public void deletePost(Long id) {
-        postRepository.deleteById(id);
-    }
-    public PostDto updatePost(Long id, String text) {
-        Optional<Post> postOptional = postRepository.findById(id);
+    public void deletePost(Long postId) {
+        Optional<Post> postOptional = postRepository.findById(postId);
         if(postOptional.isPresent()){
             Post post = postOptional.get();
-            post.setText(text);
-            return this.convertPostToDto(postRepository.save(post));
+            if(post.getUser().getId().equals(userService.getAuthorizedUser().getId())) {
+                postRepository.deleteById(postId);
+            }
+            else {
+                throw new UserActionRestrictedException("Access to the requested action is restricted.");
+            }
         }
         else {
-            throw new PostNotFoundException("The post with ID " + id + " does not exist");
+            throw new PostNotFoundException("The post with ID " + postId + " does not exist");
+        }
+    }
+    public PostDto updatePost(Long postId, Post updatedPost) {
+        Optional<Post> postOptional = postRepository.findById(postId);
+        if(postOptional.isPresent()){
+            Post post = postOptional.get();
+            if(post.getUser().getId().equals(userService.getAuthorizedUser().getId())) {
+                post.setText(updatedPost.getText());
+                return this.convertPostToDto(postRepository.save(post));
+            }
+            else {
+                throw new UserActionRestrictedException("Access to the requested action is restricted.");
+            }
+        }
+        else {
+            throw new PostNotFoundException("The post with ID " + postId + " does not exist");
         }
     }
 
-    public PostDto getPostById(Long id) {
-        Optional<Post> postOptional = postRepository.findById(id);
+    public PostDto getPostById(Long postId) {
+        Optional<Post> postOptional = postRepository.findById(postId);
         if(postOptional.isPresent()) {
             return this.convertPostToDto(postOptional.get());
         }
-        else throw new PostNotFoundException("The post with ID " + id + " does not exist");
+        else throw new PostNotFoundException("The post with ID " + postId + " does not exist");
+    }
+
+    public void like(Long postId) {
+        Optional<Post> postOptional = postRepository.findById(postId);
+        if(postOptional.isPresent()) {
+            User user = userService.getAuthorizedUser();
+            Post post = postOptional.get();
+            if(post.getLikedBy().contains(user)) {
+                post.getLikedBy().remove(user);
+            }
+            else {
+                post.getLikedBy().add(user);
+            }
+            postRepository.save(post);
+        }
+        else throw new PostNotFoundException("The post with ID " + postId + " does not exist");
     }
 
     private PostDto convertPostToDto(Post post){
