@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 public class AuthController {
 
     private final CustomUserDetailsService userDetailsService;
@@ -31,8 +32,8 @@ public class AuthController {
     //get JWT token
     @PostMapping("/login")
     public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest request){
+        //TODO: add AuthService add putt all logic there
         this.doAuthenticate(request.getEmail(), request.getPassword());
-
         UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
         String token = this.helper.generateToken(userDetails);
 
