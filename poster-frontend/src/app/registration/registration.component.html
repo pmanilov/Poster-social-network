@@ -1,1 +1,53 @@
-<p>registration works!</p>
+<!--
+<div class="registration-container">
+  <h1>Регистрация</h1>
+  <form (submit)="register()">
+    <div class="form-group">
+      <label>Имя пользователя:</label>
+      <input type="text" name="username" [(ngModel)]="username" required>
+      <div class="error-message" *ngIf="submitted && isFieldEmpty('username')">Поле должно быть заполнено</div>
+    </div>
+    <div class="form-group">
+      <label>Электронная почта:</label>
+      <input type="email" name="email" [(ngModel)]="email" required>
+      <div class="error-message" *ngIf="submitted && isFieldEmpty('email')">Поле должно быть заполнено</div>
+    </div>
+    <div class="form-group">
+      <label>Пароль:</label>
+      <input type="password" name="password" [(ngModel)]="password" required>
+      <div class="error-message" *ngIf="submitted && isFieldEmpty('password')">Поле должно быть заполнено</div>
+    </div>
+    <div class="form-group">
+      <label>О себе:</label>
+      <textarea name="about" [(ngModel)]="about"></textarea>
+    </div>
+    <button type="submit">Зарегистрироваться</button>
+    <div class="error-message" *ngIf="submitted && isAnyFieldEmpty()">Необходимо заполнить все обязательные поля</div>
+  </form>
+</div>
+-->
+
+<div class="registration-container">
+  <h1>Регистрация</h1>
+  <form (submit)="register()">
+    <div class="form-group">
+      <label>Имя пользователя:</label>
+      <input type="text" name="username" [(ngModel)]="registrationData.username" required>
+    </div>
+    <div class="form-group">
+      <label>Электронная почта:</label>
+      <input type="email" name="email" [(ngModel)]="registrationData.email" required>
+    </div>
+    <div class="form-group">
+      <label>Пароль:</label>
+      <input type="password" name="password" [(ngModel)]="registrationData.password" required>
+    </div>
+    <div class="form-group">
+      <label>О себе:</label>
+      <textarea name="about" [(ngModel)]="registrationData.about"></textarea>
+    </div>
+    <button type="submit">Зарегистрироваться</button>
+    <div class="error-message" *ngIf="isFormInvalid">Необходимо заполнить все обязательные поля</div>
+    <div class="error-message" *ngIf="registrationFailed">Пользователь с таким email или username уже сущетвует</div>
+  </form>
+</div>

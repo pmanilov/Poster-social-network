@@ -1,1 +1,29 @@
+<!--
 <h2>Login</h2>
+<input [(ngModel)]="email" type="text" placeholder="Введите имя" id="nameInput">
+<input [(ngModel)]="password" type="text" placeholder="Введите пароль" id="nameInput">
+
+<button (click)="getToken()">Login</button>
+<h2>{{token}}</h2>
+-->
+
+<div class="login-container">
+  <h1>Вход</h1>
+  <form (submit)="login()">
+    <div class="form-group">
+      <label>Электронная почта:</label>
+      <input type="email" name="email" [(ngModel)]="JwtRequest.email" required>
+    </div>
+    <div class="form-group">
+      <label>Пароль:</label>
+      <input type="password" name="password" [(ngModel)]="JwtRequest.password" required>
+    </div>
+    <div class="alert" *ngIf="loginFailed">Логин или пароль неверные.</div>
+    <button type="submit">Войти</button>
+  </form>
+  <div class="register-link">
+    <p>Еще не зарегистрированы в нашем приложении?</p>
+    <a href="/registration">Регистрация</a>
+  </div>
+</div>
+

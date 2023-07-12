@@ -9,6 +9,7 @@ import { RegistrationComponent } from './registration/registration.component';
 import { UserComponent } from './user/user.component';
 import { PostComponent } from './post/post.component';
 import {FormsModule} from "@angular/forms";
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import {FormsModule} from "@angular/forms";
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     FormsModule
   ],
   providers: [],
