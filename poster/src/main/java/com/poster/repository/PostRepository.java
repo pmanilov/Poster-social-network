@@ -13,6 +13,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findAll();
     Optional<Post> findById(Long Id);
     List<Post> findAllByUserId(Long user_id);
-    @Query("SELECT p FROM Post p WHERE p.user.id IN :following ORDER BY p.id DESC")
+    @Query("SELECT p FROM Post p WHERE p.user.id IN :following ORDER BY p.date DESC")
     List<Post> findPostsByFollowing(@Param("following") List<Long> following);
 }
