@@ -14,8 +14,15 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
+//TODO: add origins to properties
+@CrossOrigin(origins = "http://localhost:4200", allowedHeaders = {"Authorization"})
 public class UserController {
     private final UserService userService;
+
+    @GetMapping("/token")
+    public ResponseEntity<UserDto> getUserByToken(){
+        return new ResponseEntity<>(userService.getUserByToken(), HttpStatus.OK);
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUser(@PathVariable Long id){

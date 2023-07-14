@@ -24,6 +24,10 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public UserDto getUserByToken() {
+        return convertUserToDto(getAuthorizedUser());
+    }
+
     public UserDto getUserById(Long id) {
         return userRepository.findById(id).map(this::convertUserToDto).orElseThrow(() -> new RuntimeException("User no found!"));
     }

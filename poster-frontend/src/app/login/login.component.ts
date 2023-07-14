@@ -33,6 +33,7 @@ export class LoginComponent {
       {
         next: ((response: any) => {
           // add jwt token to cookie in period of 24 hours
+          this.cookieService.delete('token');
           this.cookieService.set('token', response.jwtToken, 24);
           this.openProfilePage();
         }),
@@ -44,6 +45,7 @@ export class LoginComponent {
       }
     );
   }
+
 
   openProfilePage(){
     this.router.navigate(["/profile"]);

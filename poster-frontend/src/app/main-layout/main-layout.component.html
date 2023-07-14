@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Моя страница</title>
+</head>
+<body>
+<div class="main-layout">
+  <header class="header">
+    <h1>Poster</h1>
+  </header>
+
+  <div class="content">
+    <div class="sidebar">
+      <ul>
+        <li><a routerLink="/profile">Моя страница</a></li>
+        <li><a routerLink="/posts">Посты</a></li>
+        <li><a routerLink="/messenger">Мессенджер</a></li>
+        <li><a routerLink="/subscriptions">Подписки</a></li>
+      </ul>
+    </div>
+
+    <div class="page-content">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>© 2023 Моя страница. Все права защищены.</p>
+  </footer>
+</div>
+</body>
+</html>

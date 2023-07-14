@@ -1,0 +1,125 @@
+.profile {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.profile-photo {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+.username {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.about {
+  font-size: 16px;
+  color: #888;
+}
+
+.followers {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.count {
+  margin-right: 20px;
+  font-size: 16px;
+  color: #888;
+}
+
+.followers-count,
+.following-count {
+  font-weight: bold;
+}
+
+.posts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.post {
+  width: calc(33.33% - 20px);
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.post-title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.post-date {
+  font-size: 14px;
+  color: #888;
+}
+
+.comments-toggle {
+  border: none;
+  background-color: transparent;
+  color: #888;
+  cursor: pointer;
+}
+
+.post-photo img {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.post-text {
+  margin-bottom: 10px;
+}
+
+.post-likes {
+  font-size: 14px;
+  color: #888;
+}
+
+.post-comments {
+  margin-top: 10px;
+}
+
+.post-comments h3 {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.post-comments ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.post-comments li {
+  margin-bottom: 5px;
+}
