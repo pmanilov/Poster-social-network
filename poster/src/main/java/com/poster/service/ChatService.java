@@ -30,7 +30,14 @@ public class ChatService {
     public ChatDto getChatById(Long chatId){
         Optional<Chat> chatOptional = chatRepository.findById(chatId);
         if(chatOptional.isPresent()){
-            return this.convertChatToDto(chatOptional.get());
+            Chat chat = chatOptional.get();
+            if(chat.getFirstUser().getId().equals(userService.getAuthorizedUser().getId())
+                    || chat.getSecondUser().getId().equals(userService.getAuthorizedUser().getId())) {
+                return this.convertChatToDto(chat);
+            }
+            else {
+                throw new UserActionRestrictedException("Access to the requested action is restricted.");
+            }
         }
         else {
             throw new ChatNotFoundException("The chat with ID "+chatId+" does not exist!");
@@ -49,6 +56,9 @@ public class ChatService {
     public ChatDto createChat(ChatRequest chatRequest) {
         User firstUser = userService.getUserEntityById(chatRequest.getFirstUserId());
         User secondUser = userService.getUserEntityById(chatRequest.getSecondUserId());
+        if(!firstUser.getId().equals(userService.getAuthorizedUser().getId()) && !secondUser.getId().equals(userService.getAuthorizedUser().getId())){
+            throw new UserActionRestrictedException("Access to the requested action is restricted.");
+        }
         if (chatRepository.findByUsersId(firstUser.getId(), secondUser.getId()).isEmpty()) {
             Chat chat = new Chat();
             chat.setFirstUser(firstUser);
@@ -64,9 +74,15 @@ public class ChatService {
         Optional<Chat> chatOptional = chatRepository.findById(chatId);
         if(chatOptional.isPresent()){
             Chat chat = chatOptional.get();
-            message.setChat(chat);
-            chat.getMessages().add(message);
-            return  this.convertChatToDto(chatRepository.save(chat));
+            if(chat.getFirstUser().getId().equals(userService.getAuthorizedUser().getId())
+                    || chat.getSecondUser().getId().equals(userService.getAuthorizedUser().getId())) {
+                message.setChat(chat);
+                chat.getMessages().add(message);
+                return  this.convertChatToDto(chatRepository.save(chat));
+            }
+            else {
+                throw new UserActionRestrictedException("Access to the requested action is restricted.");
+            }
         }
         else {
             throw new ChatNotFoundException("The chat with ID "+message.getChat().getId()+" does not exist!");
