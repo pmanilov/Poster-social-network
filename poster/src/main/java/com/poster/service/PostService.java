@@ -65,12 +65,16 @@ public class PostService {
         }
     }
 
-    public PostDto getPostById(Long postId) {
+    public PostDto getPostDtoById(Long postId) {
         Optional<Post> postOptional = postRepository.findById(postId);
         if(postOptional.isPresent()) {
             return this.convertPostToDto(postOptional.get());
         }
         else throw new PostNotFoundException("The post with ID " + postId + " does not exist");
+    }
+
+    public Post getPostById(Long postId) {
+        return postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException("The post with ID " + postId + " does not exist"));
     }
 
     public void like(Long postId) {

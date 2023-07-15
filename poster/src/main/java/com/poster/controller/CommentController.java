@@ -2,6 +2,7 @@ package com.poster.controller;
 
 import com.poster.dto.CommentDto;
 import com.poster.model.Comment;
+import com.poster.request.CreateCommentRequest;
 import com.poster.service.CommentService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/comments")
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200", allowedHeaders = {"Authorization", "Content-Type"})
 public class CommentController {
 
     private final CommentService commentService;
@@ -28,8 +30,9 @@ public class CommentController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<CommentDto> createComment(@Valid @RequestBody Comment comment) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(commentService.createComment(comment));
+    public ResponseEntity<CommentDto> createComment(@RequestBody CreateCommentRequest commentRequest) {
+        System.out.println(commentRequest.getText() + " " + commentRequest.getPostId());
+        return ResponseEntity.status(HttpStatus.CREATED).body(commentService.createComment(commentRequest));
     }
 
     @PutMapping("/edit/{commentId}")

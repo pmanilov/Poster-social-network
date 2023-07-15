@@ -32,8 +32,7 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/auth/login").permitAll()
-                                .requestMatchers("/auth/csrf-token").permitAll()
-                                .requestMatchers("/test/hello").permitAll()
+                                .requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/v3/api-docs/**").permitAll()
                                 .requestMatchers("/auth/create-user").permitAll()
                                 .anyRequest().authenticated())
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(point))

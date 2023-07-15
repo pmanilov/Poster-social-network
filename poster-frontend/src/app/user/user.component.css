@@ -1,5 +1,5 @@
 .profile {
-  max-width: 600px;
+  max-width: 100%;
   margin: 0 auto;
   padding: 20px;
   background-color: #f5f5f5;
@@ -48,78 +48,84 @@
   font-weight: bold;
 }
 
+
 .posts {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  max-width: 800px;
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .post {
-  width: calc(33.33% - 20px);
   margin-bottom: 20px;
   padding: 10px;
-  background-color: #fff;
-  border: 1px solid #ddd;
+  background-color: #ffffff;
   border-radius: 5px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .post-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
 }
 
-.post-title {
-  font-size: 20px;
-  font-weight: bold;
-}
-
-.post-date {
-  font-size: 14px;
-  color: #888;
-}
-
-.comments-toggle {
-  border: none;
-  background-color: transparent;
-  color: #888;
-  cursor: pointer;
-}
-
-.post-photo img {
-  width: 100%;
-  max-height: 200px;
+.user-photo {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
   object-fit: cover;
-  border-radius: 5px;
-  margin-bottom: 10px;
+  margin-right: 10px;
 }
 
 .post-text {
+  margin-bottom: 5px;
+}
+
+.post-date {
+  font-size: 12px;
+  color: #888;
   margin-bottom: 10px;
 }
 
-.post-likes {
-  font-size: 14px;
-  color: #888;
+.post-actions {
+  display: flex;
+  margin-bottom: 10px;
 }
 
-.post-comments {
+.like-button,
+.comments-button {
+  margin-right: 10px;
+}
+
+.comments-section {
   margin-top: 10px;
 }
 
-.post-comments h3 {
-  font-size: 16px;
-  font-weight: bold;
+.comment {
   margin-bottom: 5px;
 }
 
-.post-comments ul {
-  list-style-type: none;
-  padding-left: 0;
+.comment-text {
+  margin-bottom: 5px;
 }
 
-.post-comments li {
+.comment-date {
+  font-size: 12px;
+  color: #888;
   margin-bottom: 5px;
+}
+
+.comment-input {
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.comment-submit {
+  background-color: #4caf50;
+  color: #ffffff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
 }
