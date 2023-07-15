@@ -69,8 +69,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 log.info("Validation fails !!");
             }
         }
-        log.info("Token is valid");
 
         filterChain.doFilter(request, response);
+
+        log.info("Token is valid");
     }
 }

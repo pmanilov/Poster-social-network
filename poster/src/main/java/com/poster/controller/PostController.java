@@ -14,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/posts")
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200", allowedHeaders = {"Authorization"})
 public class PostController {
 
     private final PostService postService;
@@ -25,7 +26,7 @@ public class PostController {
 
     @GetMapping("/{postId}")
     public ResponseEntity<PostDto> getPostById(@PathVariable Long postId) {
-        return ResponseEntity.ok(postService.getPostById(postId));
+        return ResponseEntity.ok(postService.getPostDtoById(postId));
     }
 
     @GetMapping("/user/{userId}")

@@ -5,8 +5,10 @@ import com.poster.dto.UserShortInfo;
 import com.poster.exception.CommentNotFoundException;
 import com.poster.exception.UserActionRestrictedException;
 import com.poster.model.Comment;
+import com.poster.model.Post;
 import com.poster.model.User;
 import com.poster.repository.CommentRepository;
+import com.poster.request.CreateCommentRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,52 +22,54 @@ import java.util.stream.Collectors;
 public class CommentService {
     private final CommentRepository commentRepository;
     private final UserService userService;
+    private final PostService postService;
+
+
     public List<CommentDto> getCommentByPostId(Long postId) {
         return commentRepository.findAllByPostId(postId).stream().map(this::convertCommentToDto).collect(Collectors.toList());
     }
 
-    public CommentDto createComment(Comment comment) {
-        comment.setUser(userService.getAuthorizedUser());
+    public CommentDto createComment(CreateCommentRequest commentRequest) {
+        Comment comment = Comment.builder()
+                .text(commentRequest.getText())
+                .user(userService.getAuthorizedUser())
+                .post(postService.getPostById(commentRequest.getPostId())).build();
         comment.setDate(LocalDateTime.now());
         return this.convertCommentToDto(commentRepository.save(comment));
     }
 
-    public void deleteComment(Long commentId){
+    public void deleteComment(Long commentId) {
         Optional<Comment> postOptional = commentRepository.findById(commentId);
-        if(postOptional.isPresent()){
+        if (postOptional.isPresent()) {
             Comment comment = postOptional.get();
-            if(comment.getUser().getId().equals(userService.getAuthorizedUser().getId())) {
+            if (comment.getUser().getId().equals(userService.getAuthorizedUser().getId())) {
                 commentRepository.deleteById(commentId);
-            }
-            else {
+            } else {
                 throw new UserActionRestrictedException("Access to the requested action is restricted.");
             }
-        }
-        else {
+        } else {
             throw new CommentNotFoundException("The comment with ID " + commentId + " does not exist");
         }
     }
+
     public CommentDto getCommentById(Long commentId) {
         Optional<Comment> commentOptional = commentRepository.findById(commentId);
-        if(commentOptional.isPresent()){
+        if (commentOptional.isPresent()) {
             return this.convertCommentToDto(commentOptional.get());
-        }
-        else throw new CommentNotFoundException("The comment with ID " + commentId + " does not exist");
+        } else throw new CommentNotFoundException("The comment with ID " + commentId + " does not exist");
     }
 
     public CommentDto updateComment(Long commentId, Comment updatedComment) {
         Optional<Comment> commentOptional = commentRepository.findById(commentId);
-        if(commentOptional.isPresent()){
+        if (commentOptional.isPresent()) {
             Comment comment = commentOptional.get();
-            if(comment.getUser().getId().equals(userService.getAuthorizedUser().getId())) {
+            if (comment.getUser().getId().equals(userService.getAuthorizedUser().getId())) {
                 comment.setText(updatedComment.getText());
                 return this.convertCommentToDto(commentRepository.save(comment));
-            }
-            else {
+            } else {
                 throw new UserActionRestrictedException("Access to the requested action is restricted.");
             }
-        }
-        else throw new CommentNotFoundException("The comment with ID " + commentId + " does not exist");
+        } else throw new CommentNotFoundException("The comment with ID " + commentId + " does not exist");
     }
 
     private CommentDto convertCommentToDto(Comment comment) {
@@ -77,7 +81,8 @@ public class CommentService {
                 .user(this.convertUserToShortInfo(comment.getUser()))
                 .build();
     }
-    private UserShortInfo convertUserToShortInfo(User user){
+
+    private UserShortInfo convertUserToShortInfo(User user) {
         return UserShortInfo.builder()
                 .id(user.getId())
                 .username(user.getUsername())

@@ -1,34 +1,34 @@
 <div class="profile">
-  <div class="profile-header">
+  <div *ngIf="user" class="profile-header">
     <img [src]="" alt="Profile Photo" class="profile-photo">
-    <h1 class="username">{{ username }}</h1>
-    <p class="about">{{ about }}</p>
+    <h1 class="username">{{ user.username }}</h1>
+    <p class="about">{{ user.about }}</p>
     <div class="followers">
-      <span class="count">Followers: <span class="followers-count">{{ amountOfFollowers }}</span></span>
-      <span class="count">Following: <span class="following-count">{{ amountOfFollowing }}</span></span>
+      <span class="count">Followers: <span class="followers-count">{{ user.amountOfFollowers }}</span></span>
+      <span class="count">Following: <span class="following-count">{{ user.amountOfFollowing }}</span></span>
     </div>
   </div>
 
-  <!--<div class="posts">
-    <div class="post" *ngFor="let post of posts">
+  <div *ngIf="posts" class="posts">
+    <div *ngFor="let post of posts" class="post">
       <div class="post-header">
-        <h2 class="post-title">{{ post.title }}</h2>
-        <p class="post-date">{{ post.date }}</p>
-        <button class="comments-toggle" (click)="toggleComments(post)">Показать комментарии</button>
+        <img [src]=""  alt="User Photo" class="user-photo">
+        <h2 class="username">{{ post.user.username }}</h2>
       </div>
-      <div class="post-content">
-        <div *ngIf="post.photo" class="post-photo">
-          <img [src]="post.photo" alt="Post Photo">
+      <p class="post-text">{{ post.text }}</p>
+      <p class="post-date">{{ post.date }}</p>
+      <div class="post-actions">
+        <button (click)="likePost(post.id)" class="like-button">Like</button>
+        <button (click)="showComments(post.id)" class="comments-button">Comments</button>
+      </div>
+      <div *ngIf="post.showComments" class="comments-section">
+        <div *ngFor="let comment of post.comments" class="comment">
+          <p class="comment-text">{{ comment.text }}</p>
+          <p class="comment-date">{{ comment.date }}</p>
         </div>
-        <p class="post-text">{{ post.text }}</p>
-        <p class="post-likes">Лайков: {{ post.likes }}</p>
-        <div class="post-comments" *ngIf="post.showComments">
-          <h3>Комментарии:</h3>
-          <ul>
-            <li *ngFor="let comment of post.comments">{{ comment }}</li>
-          </ul>
-        </div>
+        <input [(ngModel)]= newComment class="comment-input" placeholder="Write a comment">
+        <button (click)="addComment(post.id)" class="comment-submit">Submit</button>
       </div>
     </div>
   </div>
-</div>-->
+</div>
