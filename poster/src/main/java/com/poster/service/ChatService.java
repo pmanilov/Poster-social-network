@@ -44,13 +44,8 @@ public class ChatService {
         }
     }
 
-    public List<ChatShortDto> getChatByUserId(Long userId) {
-        if(userService.getAuthorizedUser().getId().equals(userId)){
-            return chatRepository.findAllByUserId(userId).stream().map(this::convertChatToShortDto).collect(Collectors.toList());
-        }
-        else {
-            throw new UserActionRestrictedException("Access to the requested action is restricted.");
-        }
+    public List<ChatShortDto> getAllChats() {
+        return chatRepository.findAllByUserId(userService.getAuthorizedUser().getId()).stream().map(this::convertChatToShortDto).collect(Collectors.toList());
     }
 
     public ChatDto createChat(ChatRequest chatRequest) {

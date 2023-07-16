@@ -14,6 +14,8 @@ import {UserService} from "./services/user.service";
 import {AuthService} from "./services/auth.service";
 import {PostService} from "./services/post.service";
 import {CommentService} from "./services/comment.service";
+import { ChatComponent } from './chat/chat.component';
+import {ChatService} from "./services/chat.service";
 
 @NgModule({
   declarations: [
@@ -22,7 +24,8 @@ import {CommentService} from "./services/comment.service";
     RegistrationComponent,
     UserComponent,
     PostComponent,
-    MainLayoutComponent
+    MainLayoutComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule,
@@ -34,7 +37,8 @@ import {CommentService} from "./services/comment.service";
     UserService,
     PostService,
     AuthService,
-    CommentService
+    CommentService,
+    ChatService
   ],
   bootstrap: [AppComponent]
 })
