@@ -69,33 +69,12 @@ export class ChatComponent implements OnInit {
     this.chatService.getChatById(this.chatId).subscribe(
       (currentChat: ChatModel) => {
         this.chat = currentChat;
-        this.formatMessageDates();
       },
       (error) => {
         console.log('Ошибка при загрузке чата:', error);
       }
     );
   }
-  formatMessageDates(): void {
-    if (this.chat && this.chat.messages) {
-      this.chat.messages.forEach((message: MessageModel) => {
-        message.date = this.formatDate(message.date); // Форматируем дату каждого сообщения
-      });
-    }
-  }
-
-  formatDate(dateString: string): string {
-    const date: Date = new Date(dateString);
-    const options: Intl.DateTimeFormatOptions = {
-      year: '2-digit',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-    };
-    return date.toLocaleDateString('ru-RU', options).replace(',', '');
-  }
-
   sendMessage(): void {
     if (this.message.trim() !== '') {
       const newMessage: MessageModel = {

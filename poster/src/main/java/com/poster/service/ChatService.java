@@ -1,5 +1,6 @@
 package com.poster.service;
 
+import ch.qos.logback.core.util.CachingDateFormatter;
 import com.poster.dto.ChatDto;
 import com.poster.dto.ChatShortDto;
 import com.poster.dto.MessageDto;
@@ -16,6 +17,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -102,9 +104,10 @@ public class ChatService {
     }
 
     private MessageDto convertMessageToDto(Message message){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yy HH:mm");
         return  MessageDto.builder()
                 .id(message.getId())
-                .date(message.getDate())
+                .date(message.getDate().format(formatter))
                 .text(message.getText())
                 .sender(convertUserToShortInfo(message.getSender()))
                 .build();
