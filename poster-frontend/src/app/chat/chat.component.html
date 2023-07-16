@@ -3,7 +3,7 @@
     <h2>Список чатов</h2>
     <ul>
       <li *ngFor="let userChat of userChats" (click)="selectChat(userChat.id)" [class.selected]="userChat.id === chatId">
-        {{getOtherUserName(userChat, currentUser)}}
+        {{ getOtherUserName(userChat, currentUser) }}
       </li>
     </ul>
   </div>
@@ -11,10 +11,11 @@
     <h2>Чат</h2>
     <div *ngIf="chat">
       <ul>
-        <li *ngFor="let message of chat.messages">
-          <span class="message-time">{{ message.date }}</span>
-          <span class="message-text">{{ message.text }}</span><br>
-          <span class="message-sender">{{ message.sender.username }}</span>
+        <li *ngFor="let message of chat.messages" [ngClass]="{'own-message': message.sender.username === currentUser}">
+          <div class="message-bubble" [ngClass]="{'own-message-bubble': message.sender.username === currentUser}">
+            <span class="message-text">{{ message.text }}</span><br>
+            <span class="message-time">{{ message.date }}</span>
+          </div>
         </li>
       </ul>
     </div>
@@ -22,10 +23,10 @@
       <p>Выберите чат из списка</p>
     </div>
     <div *ngIf="chat">
-    <div class="message-input">
-      <input type="text" [(ngModel)]="message" placeholder="Введите сообщение">
-      <button (click)="sendMessage()">Отправить</button>
-    </div>
+      <div class="message-input">
+        <input type="text" [(ngModel)]="message" placeholder="Введите сообщение" (keydown.enter)="sendMessage()">
+        <button (click)="sendMessage()">Отправить</button>
+      </div>
     </div>
   </div>
 </div>

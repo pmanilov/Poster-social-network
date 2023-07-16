@@ -64,3 +64,24 @@
 .message-input button {
   padding: 5px 10px;
 }
+.message-bubble {
+  display: inline-block;
+  padding: 8px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.own-message {
+  text-align: right;
+}
+
+.message-bubble:not(.own-message-bubble) {
+  background-color: #40cfff;
+}
+
+.own-message-bubble {
+  background-color: #c7edfc;
+}
+
+
+
