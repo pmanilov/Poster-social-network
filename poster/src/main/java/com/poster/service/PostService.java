@@ -11,6 +11,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,7 +28,10 @@ public class PostService {
         return postRepository.findAll().stream().map(this::convertPostToDto).collect(Collectors.toList());
     }
     public List<PostDto> getPostByUserId(Long userId) {
-        return postRepository.findAllByUserId(userId).stream().map(this::convertPostToDto).collect(Collectors.toList());
+        List<PostDto> postDtos = new ArrayList<>(postRepository.findAllByUserId(userId)
+                .stream().map(this::convertPostToDto).toList());
+        Collections.reverse(postDtos);
+        return postDtos;
     }
     public PostDto createPost(Post post) {
         post.setUser(userService.getAuthorizedUser());
@@ -110,5 +115,12 @@ public class PostService {
                 .id(user.getId())
                 .username(user.getUsername())
                 .build();
+    }
+
+    public boolean isPostLiked(Long postId) {
+        if (postRepository.findById(postId).isEmpty()){
+            throw new PostNotFoundException("There is no post with id = " + postId + " !!");
+        }
+        return postRepository.isPostLikedByUser(postId, userService.getAuthorizedUser().getId());
     }
 }

@@ -5,6 +5,7 @@ import {RegistrationComponent} from "./registration/registration.component";
 import {UserComponent} from "./user/user.component";
 import {MainLayoutComponent} from "./main-layout/main-layout.component";
 import {PostComponent} from "./post/post.component";
+import {FollowersAndFollowingComponent} from "./followers-and-following/followers-and-following.component";
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent},
@@ -12,7 +13,9 @@ const routes: Routes = [
   { path: '', component: MainLayoutComponent,
   children:[
     {path: 'profile', component: UserComponent},
-    {path: 'posts', component: PostComponent}
+    {path: 'profile/:id', component: UserComponent},
+    {path: 'posts', component: PostComponent},
+    {path: 'subscriptions', component: FollowersAndFollowingComponent}
   ]}
 ];
 

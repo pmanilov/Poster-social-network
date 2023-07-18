@@ -49,6 +49,11 @@ public class PostController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/like/{postId}")
+    public ResponseEntity<Boolean> isPostLikedByUser(@PathVariable Long postId){
+        return ResponseEntity.ok(postService.isPostLiked(postId));
+    }
+
     @PostMapping("/like/{postId}")
     public ResponseEntity<Void> likePost(@PathVariable Long postId) {
         postService.like(postId);

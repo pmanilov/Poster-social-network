@@ -11,4 +11,5 @@ export interface PostModel {
   showComments: boolean;
   user: UserShortInfoModel;
   comments: CommentModel[];
+  likedByCurrentUser: boolean;
 }

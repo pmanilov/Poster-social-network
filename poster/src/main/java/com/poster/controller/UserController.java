@@ -24,6 +24,16 @@ public class UserController {
         return new ResponseEntity<>(userService.getUserByToken(), HttpStatus.OK);
     }
 
+    @GetMapping("/subscribed/{id}")
+    public ResponseEntity<Boolean> isSubscribed(@PathVariable Long id){
+        return new ResponseEntity<>(userService.isSubscribed(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/ownership/{id}")
+    public ResponseEntity<Boolean> checkOwnership(@PathVariable Long id){
+        return new ResponseEntity<>(userService.checkOwnership(id), HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUser(@PathVariable Long id){
         return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
@@ -47,14 +57,9 @@ public class UserController {
 
     @PostMapping("/subscribe")
     public ResponseEntity subscribe(@RequestBody FollowRequest followRequest){
-        userService.follow(followRequest.getFollowingId());
+        userService.followUnfollow(followRequest.getFollowingId());
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @PostMapping("/unsubscribe")
-    public ResponseEntity unsubscribe(@RequestBody FollowRequest followRequest){
-        userService.unfollow(followRequest.getFollowingId());
-        return new ResponseEntity(HttpStatus.OK);
-    }
 
 }

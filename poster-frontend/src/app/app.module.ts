@@ -14,6 +14,7 @@ import {UserService} from "./services/user.service";
 import {AuthService} from "./services/auth.service";
 import {PostService} from "./services/post.service";
 import {CommentService} from "./services/comment.service";
+import { FollowersAndFollowingComponent } from './followers-and-following/followers-and-following.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import {CommentService} from "./services/comment.service";
     RegistrationComponent,
     UserComponent,
     PostComponent,
-    MainLayoutComponent
+    MainLayoutComponent,
+    FollowersAndFollowingComponent
   ],
   imports: [
     BrowserModule,
