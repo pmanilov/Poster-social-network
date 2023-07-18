@@ -35,9 +35,8 @@ public class PostService {
     }
 
     public List<PostDto> getPostByUserId(Long userId) {
-        List<PostDto> postDtos = new ArrayList<>(postRepository.findAllByUserId(userId)
+        List<PostDto> postDtos = new ArrayList<>(postRepository.findAllByUserIdOrderByDateDesc(userId)
                 .stream().map(this::convertPostToDto).toList());
-        Collections.reverse(postDtos);
         return postDtos;
     }
 

@@ -16,7 +16,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findAllOrderByLikesCountDesc();
     Optional<Post> findById(Long Id);
 
-    List<Post> findAllByUserId(@Param("user")Long user_id);
+    List<Post> findAllByUserIdOrderByDateDesc(Long user_id);
 
     @Query(value = """
            SELECT CASE WHEN COUNT(s) > 0 THEN true ELSE false END
