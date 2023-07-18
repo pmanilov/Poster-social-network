@@ -1,1 +1,34 @@
-<p>post works!</p>
+<div>
+  <select [(ngModel)]="viewMode" (ngModelChange)="changeView()">
+    <option value="all">Все посты</option>
+    <option value="following">Только подписчики</option>
+  </select>
+</div>
+
+<div *ngIf="posts" class="posts">
+  <div *ngFor="let post of posts" class="post">
+    <div class="post-header">
+      <img [src]=""  alt="User Photo" class="user-photo">
+      <h2 class="username">{{ post.user.username }}</h2>
+    </div>
+    <p class="post-text">{{ post.text }}</p>
+    <p class="post-date">{{ post.date }}</p>
+    <div class="post-actions">
+      <div style="flex-grow: 1;"></div>
+      <button (click)="likePost(post.id)" class="like-button">Like ({{ post.amountOfLikes }})</button>
+      <button (click)="showComments(post.id)" class="comments-button">Comments ({{ post.amountOfComments }})</button>
+    </div>
+    <div *ngIf="post.showComments" class="comments-section">
+      <div *ngFor="let comment of post.comments" class="comment">
+        <div class="comment-header">
+          <img [src]="" alt="User Photo" class="comment-user-photo">
+          <h2 class="comment-username">{{ comment.user.username }}</h2>
+        </div>
+        <p class="comment-text">{{ comment.text }}</p>
+        <p class="comment-date">{{ comment.date }}</p>
+      </div>
+      <input [(ngModel)]= newComment class="comment-input" placeholder="Write a comment">
+      <button (click)="addComment(post.id)" class="comment-submit">Submit</button>
+    </div>
+  </div>
+</div>

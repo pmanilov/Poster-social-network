@@ -32,7 +32,7 @@ export class ChatComponent implements OnInit {
   }
 
   loadUserChats(): void {
-    this.userService.getUser().pipe(
+    this.userService.getUserByToken().pipe(
       map(user => user.username)
     ).subscribe(
       (username: string) => {
@@ -40,7 +40,7 @@ export class ChatComponent implements OnInit {
         this.loadChatsForUser(username);
       },
       (error) => {
-        console.log('Ошибка при загрузке пользователя:', error);
+        console.log('Error loading user:', error);
       }
     );
   }
@@ -53,7 +53,7 @@ export class ChatComponent implements OnInit {
         }));
       },
       (error) => {
-        console.log('Ошибка при загрузке чатов пользователя:', error);
+        console.log('Error loading user chats:', error);
       }
     );
   }
@@ -71,7 +71,7 @@ export class ChatComponent implements OnInit {
         this.chat = currentChat;
       },
       (error) => {
-        console.log('Ошибка при загрузке чата:', error);
+        console.log('Chat loading error:', error);
       }
     );
   }
@@ -90,7 +90,7 @@ export class ChatComponent implements OnInit {
           this.message = ''; // Очистка поля ввода сообщения после отправки
         },
         (error) => {
-          console.log('Ошибка при отправке сообщения:', error);
+          console.log('Error sending message:', error);
         }
       );
     }

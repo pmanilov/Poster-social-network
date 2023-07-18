@@ -13,8 +13,18 @@ export class PostService {
     private authService: AuthService
   ) {}
 
+  getAllPosts(): Observable<PostModel[]> {
+    const url = this.postsUrl;
+    return this.http.get<PostModel[]>(url, this.authService.getAuthorizationHeader());
+  }
+
   getAllPostsById(id: number): Observable<PostModel[]> {
     const url = this.postsUrl + "user/" + id.toString();
+    return this.http.get<PostModel[]>(url, this.authService.getAuthorizationHeader());
+  }
+
+  getAllPostsByFollowing(): Observable<PostModel[]> {
+    const url = this.postsUrl + "following";
     return this.http.get<PostModel[]>(url, this.authService.getAuthorizationHeader());
   }
 

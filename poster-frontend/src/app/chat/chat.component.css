@@ -76,11 +76,17 @@
 }
 
 .message-bubble:not(.own-message-bubble) {
-  background-color: #40cfff;
+  background-color: #87ceeb;
 }
 
 .own-message-bubble {
   background-color: #c7edfc;
+}
+
+.message-time{
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 10px;
 }
 
 

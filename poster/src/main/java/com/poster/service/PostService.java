@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -35,8 +36,8 @@ public class PostService {
         return postDtos;
     }
 
-    public List<PostDto> getPostByFollowing(Long userId) {
-        List<Long> following = userService.getFollowedUsers(userId).stream().map(UserShortInfo::getId).collect(Collectors.toList());
+    public List<PostDto> getPostByFollowing() {
+        List<Long> following = userService.getFollowedUsers(userService.getAuthorizedUser().getId()).stream().map(UserShortInfo::getId).collect(Collectors.toList());
         return postRepository.findPostsByFollowing(following).stream().map(this::convertPostToDto).collect(Collectors.toList());
     }
 
@@ -108,10 +109,11 @@ public class PostService {
     }
 
     private PostDto convertPostToDto(Post post){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
         return PostDto.builder()
                 .id(post.getId())
                 .text(post.getText())
-                .date(post.getDate())
+                .date(post.getDate().format(formatter))
                 .user(this.convertUserToShortInfo(post.getUser()))
                 .amountOfComments(post.getComments().size())
                 .likedBy(post.getLikedBy().stream().map(this::convertUserToShortInfo).collect(Collectors.toSet()))
