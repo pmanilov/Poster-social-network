@@ -69,6 +69,7 @@
 
 .chat-messages .own-message {
   text-align: right;
+  margin-right: 10px;
 }
 
 .chat-messages .message-bubble:not(.own-message-bubble) {
