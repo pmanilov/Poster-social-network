@@ -1,0 +1,36 @@
+<div class="profile">
+  <h1>Профиль пользователя</h1>
+
+  <div class="tabs">
+    <button (click)="selectedTab = 'following'">Подписки</button>
+    <button (click)="selectedTab = 'followers'">Подписчики</button>
+  </div>
+
+  <div class="tab-content">
+    <div *ngIf="selectedTab === 'following'">
+      <h2>Подписки</h2>
+      <div class="subscription-container">
+        <div class="subscription-item" *ngFor="let following of following" (click)="navigateToUserPage(following)">
+          <img [src]="" alt="Подписка">
+          <div class="subscription-info">
+            <h3>{{ following.username }}</h3>
+
+            <button (click)="unsubscribe(following)">Отписаться</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="selectedTab === 'followers'">
+      <h2>Подписчики</h2>
+      <div class="follower-container">
+        <div class="follower-item" *ngFor="let follower of followers" (click)="navigateToUserPage(follower)">
+          <img [src]="" alt="Подписчик">
+          <div class="follower-info">
+            <h3>{{ follower.username }}</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
