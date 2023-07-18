@@ -25,8 +25,13 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserService userService;
 
-    public List<PostDto> getAllPosts() {
-        return postRepository.findAll().stream().map(this::convertPostToDto).collect(Collectors.toList());
+    public List<PostDto> getAllPosts(String sort) {
+        if(sort.equals("date")) {
+            return postRepository.findAll().stream().map(this::convertPostToDto).collect(Collectors.toList());
+        }
+        else {
+            return postRepository.findAllOrderByLikesCountDesc().stream().map(this::convertPostToDto).collect(Collectors.toList());
+        }
     }
 
     public List<PostDto> getPostByUserId(Long userId) {
@@ -36,9 +41,14 @@ public class PostService {
         return postDtos;
     }
 
-    public List<PostDto> getPostByFollowing() {
+    public List<PostDto> getPostByFollowing(String sort) {
         List<Long> following = userService.getFollowedUsers(userService.getAuthorizedUser().getId()).stream().map(UserShortInfo::getId).collect(Collectors.toList());
-        return postRepository.findPostsByFollowing(following).stream().map(this::convertPostToDto).collect(Collectors.toList());
+        if(sort.equals("date")) {
+            return postRepository.findPostsByFollowing(following).stream().map(this::convertPostToDto).collect(Collectors.toList());
+        }
+        else {
+            return postRepository.findPostsByFollowingOrderByLikesCountDesc(following).stream().map(this::convertPostToDto).collect(Collectors.toList());
+        }
     }
 
     public PostDto createPost(Post post) {

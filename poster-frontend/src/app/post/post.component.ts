@@ -14,16 +14,17 @@ export class PostComponent {
   posts: PostModel[] = [];
   newComment = "";
   viewMode: string = 'all';
+  sort: string = 'date'
   constructor(
     private postService: PostService,
     private commentService: CommentService
   ) {
   }
   ngOnInit() {
-    this.getPosts();
+    this.getPosts(this.sort);
   }
-  getPosts() {
-    this.postService.getAllPosts().subscribe(
+  getPosts(sort: string = "date") {
+    this.postService.getAllPosts(this.sort).subscribe(
       {
         next: ((posts: PostModel[]) => {
           this.posts = posts;
@@ -39,8 +40,8 @@ export class PostComponent {
     );
   }
 
-  getPostsByFollowing() {
-    this.postService.getAllPostsByFollowing().subscribe(
+  getPostsByFollowing(sort: string = "date") {
+    this.postService.getAllPostsByFollowing(this.sort).subscribe(
       {
         next: ((posts: PostModel[]) => {
           this.posts = posts;
@@ -150,9 +151,9 @@ export class PostComponent {
 
   changeView() {
     if (this.viewMode === 'following') {
-      this.getPostsByFollowing();
+      this.getPostsByFollowing(this.sort);
     } else {
-      this.getPosts();
+      this.getPosts(this.sort);
     }
   }
 }

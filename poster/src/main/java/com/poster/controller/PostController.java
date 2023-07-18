@@ -20,8 +20,8 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping("/")
-    public ResponseEntity<List<PostDto>> getAllPosts() {
-        return ResponseEntity.ok(postService.getAllPosts());
+    public ResponseEntity<List<PostDto>> getAllPosts(@RequestParam(required = false, defaultValue = "date") String sort) {
+        return ResponseEntity.ok(postService.getAllPosts(sort));
     }
 
     @GetMapping("/{postId}")
@@ -35,8 +35,8 @@ public class PostController {
     }
 
     @GetMapping("/following")
-    public ResponseEntity<List<PostDto>> getPostByFollowing() {
-        return ResponseEntity.ok(postService.getPostByFollowing());
+    public ResponseEntity<List<PostDto>> getPostByFollowing(@RequestParam(required = false, defaultValue = "date") String sort) {
+        return ResponseEntity.ok(postService.getPostByFollowing(sort));
     }
 
     @PostMapping("/create")

@@ -13,8 +13,8 @@ export class PostService {
     private authService: AuthService
   ) {}
 
-  getAllPosts(): Observable<PostModel[]> {
-    const url = this.postsUrl;
+  getAllPosts(sort: string): Observable<PostModel[]> {
+    const url = this.postsUrl+"?sort="+sort;
     return this.http.get<PostModel[]>(url, this.authService.getAuthorizationHeader());
   }
 
@@ -23,8 +23,8 @@ export class PostService {
     return this.http.get<PostModel[]>(url, this.authService.getAuthorizationHeader());
   }
 
-  getAllPostsByFollowing(): Observable<PostModel[]> {
-    const url = this.postsUrl + "following";
+  getAllPostsByFollowing(sort: string): Observable<PostModel[]> {
+    const url = this.postsUrl + "following"+"?sort="+sort;
     return this.http.get<PostModel[]>(url, this.authService.getAuthorizationHeader());
   }
 
