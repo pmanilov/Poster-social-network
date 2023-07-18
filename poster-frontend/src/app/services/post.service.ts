@@ -6,7 +6,7 @@ import {PostModel} from "../models/post.model";
 
 @Injectable()
 export class PostService {
-  private postsByUserIdUrl = 'http://localhost:8080/posts/user/'; //getUserByToken
+  private postsUrl = 'http://localhost:8080/posts/'; //getUserByToken
 
   constructor(
     private http: HttpClient,
@@ -14,12 +14,30 @@ export class PostService {
   ) {}
 
   getAllPostsById(id: number): Observable<PostModel[]> {
-    const url = this.postsByUserIdUrl + id.toString();
+    const url = this.postsUrl + "user/" + id.toString();
     return this.http.get<PostModel[]>(url, this.authService.getAuthorizationHeader());
   }
 
-  getPost() {
-    //return this.http.get<User>(this.apiUrl, this.authService.getAuthorizationHeader());
+  likePostById(post_id: number){
+    const url = this.postsUrl + "like/" + post_id.toString();
+    return this.http.post<any>(url, JSON.stringify(""),  this.authService.getAuthorizationHeader());
   }
+
+  getPost(post_id: number) {
+    const url = this.postsUrl + post_id;
+    return this.http.get<PostModel>(url, this.authService.getAuthorizationHeader());
+  }
+
+  createPost(post_text : string){
+    let post : { text: string } = {
+      text: post_text
+    }
+    const url = this.postsUrl + "create";
+    return this.http.post<any>(url, JSON.stringify(post),  this.authService.getAuthorizationHeaderWithContentType());
+  }
+
+ /* isPostLiked(post_id: number){
+    const url = this.postsUrl + "/"
+  }*/
 
 }

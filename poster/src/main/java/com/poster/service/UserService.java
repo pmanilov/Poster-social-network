@@ -50,7 +50,7 @@ public class UserService {
                 .getFollowing().stream().map(this::convertUserToShortInfo).collect(Collectors.toList());
     }
 
-    public void follow(Long targetUserId) {
+    public void followUnfollow(Long targetUserId) {
         User user = getAuthorizedUser();
         if (user.getId().equals(targetUserId)){
             throw new RuntimeException("Id's are equals. You can't subscribe to yourself!");
@@ -58,16 +58,12 @@ public class UserService {
         User targetUser = userRepository.findById(targetUserId).orElseThrow(() -> new RuntimeException("Can't find user to subscribe"));
 
         if (userRepository.isUserSubscribed(user.getId(), targetUserId)) {
-            throw new RuntimeException("You are already subscribed");
+            userRepository.unSubscribe(user.getId(), targetUserId);
+        } else {
+            userRepository.addSubscription(user.getId(), targetUser.getId());
         }
-        userRepository.addSubscription(user.getId(), targetUser.getId());
-
     }
 
-    public void unfollow(Long targetUserId) {
-        User user = getAuthorizedUser();
-        userRepository.unSubscribe(user.getId(), targetUserId);
-    }
 
     public User getAuthorizedUser() {
         SecurityUser securityUser = (SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -91,5 +87,13 @@ public class UserService {
                 .id(user.getId())
                 .username(user.getUsername())
                 .build();
+    }
+
+    public boolean checkOwnership(long userId){
+        return getAuthorizedUser().getId().equals(userId);
+    }
+
+    public boolean isSubscribed(Long id) {
+        return userRepository.isUserSubscribed(getAuthorizedUser().getId(), id);
     }
 }

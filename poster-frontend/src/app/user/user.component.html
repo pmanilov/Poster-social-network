@@ -7,6 +7,24 @@
       <span class="count">Followers: <span class="followers-count">{{ user.amountOfFollowers }}</span></span>
       <span class="count">Following: <span class="following-count">{{ user.amountOfFollowing }}</span></span>
     </div>
+
+    <div *ngIf="ownerPage" class="create-post">
+      <button (click)="toggleCreatePost()" class="create-post-button">Создать пост</button>
+      <div *ngIf="showCreatePost" class="create-post-overlay">
+        <div class="create-post-window">
+          <textarea [(ngModel)]="postText" placeholder="Введите текст поста" class="post-textarea"></textarea>
+          <input type="file" (change)="handleFileInput($event)" class="post-file-input">
+          <button (click)="submitPost()" class="post-submit-button">Выложить</button>
+          <button (click)="closeCreatePost()" class="close-button">Закрыть</button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="!ownerPage">
+      <button (click)="subscribeOnUser()" *ngIf="!isSubscribed" class="subscribe-button">Подписаться</button>
+      <button (click)="subscribeOnUser()" *ngIf="isSubscribed" class="unsubscribe-button">Отписаться</button>
+      <button (click)="writeMessage()" *ngIf="isSubscribed" class="message-button">Написать</button>
+    </div>
   </div>
 
   <div *ngIf="posts" class="posts">
@@ -18,11 +36,16 @@
       <p class="post-text">{{ post.text }}</p>
       <p class="post-date">{{ post.date }}</p>
       <div class="post-actions">
-        <button (click)="likePost(post.id)" class="like-button">Like</button>
-        <button (click)="showComments(post.id)" class="comments-button">Comments</button>
+        <div style="flex-grow: 1;"></div>
+        <button (click)="likePost(post.id)" class="like-button">Like ({{ post.amountOfLikes }})</button>
+        <button (click)="showComments(post.id)" class="comments-button">Comments ({{ post.amountOfComments }})</button>
       </div>
       <div *ngIf="post.showComments" class="comments-section">
         <div *ngFor="let comment of post.comments" class="comment">
+          <div class="comment-header">
+            <img [src]="" alt="User Photo" class="comment-user-photo">
+            <h2 class="comment-username">{{ comment.user.username }}</h2>
+          </div>
           <p class="comment-text">{{ comment.text }}</p>
           <p class="comment-date">{{ comment.date }}</p>
         </div>
@@ -31,4 +54,8 @@
       </div>
     </div>
   </div>
+
+ <!-- <div *ngIf="posts.length < 1">
+    <h1>У пользователя пока нет постов((</h1>
+  </div>-->
 </div>

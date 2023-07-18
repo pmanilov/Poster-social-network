@@ -24,7 +24,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Transactional
     @Modifying
     @Query(value = """
-                    DELETE FROM subscriptions where follower_id = :userId AND following_id = :targetUserId)
+                    DELETE FROM subscriptions where follower_id = :userId AND following_id = :targetUserId
             """, nativeQuery = true)
     void unSubscribe(Long userId, Long targetUserId);
 
