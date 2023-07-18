@@ -27,17 +27,25 @@ public class PostService {
     public List<PostDto> getAllPosts() {
         return postRepository.findAll().stream().map(this::convertPostToDto).collect(Collectors.toList());
     }
+
     public List<PostDto> getPostByUserId(Long userId) {
         List<PostDto> postDtos = new ArrayList<>(postRepository.findAllByUserId(userId)
                 .stream().map(this::convertPostToDto).toList());
         Collections.reverse(postDtos);
         return postDtos;
     }
+
+    public List<PostDto> getPostByFollowing(Long userId) {
+        List<Long> following = userService.getFollowedUsers(userId).stream().map(UserShortInfo::getId).collect(Collectors.toList());
+        return postRepository.findPostsByFollowing(following).stream().map(this::convertPostToDto).collect(Collectors.toList());
+    }
+
     public PostDto createPost(Post post) {
         post.setUser(userService.getAuthorizedUser());
         post.setDate(LocalDateTime.now());
         return this.convertPostToDto(postRepository.save(post));
     }
+
     public void deletePost(Long postId) {
         Optional<Post> postOptional = postRepository.findById(postId);
         if(postOptional.isPresent()){
@@ -53,6 +61,7 @@ public class PostService {
             throw new PostNotFoundException("The post with ID " + postId + " does not exist");
         }
     }
+
     public PostDto updatePost(Long postId, Post updatedPost) {
         Optional<Post> postOptional = postRepository.findById(postId);
         if(postOptional.isPresent()){
