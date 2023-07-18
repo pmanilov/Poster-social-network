@@ -16,6 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/chats")
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200", allowedHeaders = {"Authorization"})
 public class ChatController {
     private final ChatService chatService;
     @GetMapping("/{chatId}")
@@ -23,9 +24,9 @@ public class ChatController {
         return ResponseEntity.ok(chatService.getChatById(chatId));
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<ChatShortDto>> getChatByUserId(@PathVariable Long userId){
-        return ResponseEntity.ok(chatService.getChatByUserId(userId));
+    @GetMapping("/")
+    public ResponseEntity<List<ChatShortDto>> getAllChats(){
+        return ResponseEntity.ok(chatService.getAllChats());
     }
 
     @PostMapping("/create")
