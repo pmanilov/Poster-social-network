@@ -9,15 +9,17 @@
   </div>
   <div class="chat-messages">
     <h2>Чат</h2>
-    <div *ngIf="chat">
-      <ul>
-        <li *ngFor="let message of chat.messages" [ngClass]="{'own-message': message.sender.username === currentUser}">
-          <div class="message-bubble" [ngClass]="{'own-message-bubble': message.sender.username === currentUser}">
-            <span class="message-text">{{ message.text }}</span><br>
-            <span class="message-time">{{ message.date }}</span>
-          </div>
-        </li>
-      </ul>
+    <div *ngIf="chat" class="messages-container">
+      <div class="messages-list">
+        <ul>
+          <li *ngFor="let message of chat.messages" [ngClass]="{'own-message': message.sender.username === currentUser}">
+            <div class="message-bubble" [ngClass]="{'own-message-bubble': message.sender.username === currentUser}">
+              <span class="message-text">{{ message.text }}</span><br>
+              <span class="message-time">{{ message.date }}</span>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
     <div *ngIf="!chat">
       <p>Выберите чат из списка</p>
