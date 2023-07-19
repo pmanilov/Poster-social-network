@@ -4,6 +4,7 @@ import { ChatModel } from '../models/chat.model';
 import { MessageModel } from '../models/message.model';
 import { HttpClient } from '@angular/common/http';
 import {AuthService} from "./auth.service";
+import {ChatCreateModel} from "../models/chat.create.model";
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,7 @@ export class ChatService {
     return this.httpClient.post<ChatModel>(this.baseUrl+ chatId + "/message", JSON.stringify(message), this.authService.getAuthorizationHeaderWithContentType());
   }
 
-  createChat(chat: ChatModel): Observable<ChatModel> {
+  createChat(chat: ChatCreateModel): Observable<ChatModel> {
     return this.httpClient.post<ChatModel>(this.baseUrl + "create", JSON.stringify(chat), this.authService.getAuthorizationHeaderWithContentType());
   }
 

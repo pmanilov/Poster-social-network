@@ -18,6 +18,7 @@ import { FollowersAndFollowingComponent } from './followers-and-following/follow
 import { ChatComponent } from './chat/chat.component';
 import { ChatService } from "./services/chat.service";
 import {ImageService} from "./services/image.service";
+import { SearchComponent } from './search/search.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import {ImageService} from "./services/image.service";
     PostComponent,
     MainLayoutComponent,
     FollowersAndFollowingComponent,
-    ChatComponent
+    ChatComponent,
+    SearchComponent
   ],
   imports: [
     BrowserModule,

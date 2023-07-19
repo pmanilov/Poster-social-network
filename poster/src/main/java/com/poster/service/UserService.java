@@ -13,6 +13,7 @@ import com.poster.secutiry.model.SecurityUser;
 import com.poster.util.ImageUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -116,7 +118,6 @@ public class UserService {
         return userRepository.isUserSubscribed(getAuthorizedUser().getId(), id);
     }
 
-
     @Transactional
     public void uploadUserImage(MultipartFile file, Long userId){
         User user;
@@ -171,5 +172,16 @@ public class UserService {
                 .imageData(ImageUtils.compressImage(file.getBytes()))
                 .user(user)
                 .build();
+    }
+  
+    public List<UserShortInfo> searchUsers(String partOfName) {
+        List<User> users = userRepository.findAll();
+        List<UserShortInfo> resultOfSearch = new ArrayList<>();
+        for(User user : users){
+            if(user.getUsername().startsWith(partOfName) && !user.getId().equals(this.getAuthorizedUser().getId())){
+                resultOfSearch.add(this.convertUserToShortInfo(user));
+            }
+        }
+        return resultOfSearch;
     }
 }

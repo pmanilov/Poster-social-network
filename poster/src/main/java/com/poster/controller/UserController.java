@@ -61,5 +61,8 @@ public class UserController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-
+    @GetMapping("/search")
+    public ResponseEntity<List<UserShortInfo>> searchUsers(@RequestParam String query){
+        return ResponseEntity.ok(userService.searchUsers(query));
+    }
 }
