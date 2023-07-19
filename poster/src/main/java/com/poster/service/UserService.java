@@ -7,10 +7,12 @@ import com.poster.repository.UserRepository;
 import com.poster.secutiry.model.SecurityUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -102,5 +104,16 @@ public class UserService {
 
     public boolean isSubscribed(Long id) {
         return userRepository.isUserSubscribed(getAuthorizedUser().getId(), id);
+    }
+
+    public List<UserShortInfo> searchUsers(String partOfName) {
+        List<User> users = userRepository.findAll();
+        List<UserShortInfo> resultOfSearch = new ArrayList<>();
+        for(User user : users){
+            if(user.getUsername().startsWith(partOfName) && !user.getId().equals(this.getAuthorizedUser().getId())){
+                resultOfSearch.add(this.convertUserToShortInfo(user));
+            }
+        }
+        return resultOfSearch;
     }
 }

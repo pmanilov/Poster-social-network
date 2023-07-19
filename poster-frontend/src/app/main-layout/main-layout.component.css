@@ -61,3 +61,33 @@ body {
   padding: 20px;
   text-align: center;
 }
+
+.search-container {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 30px;
+  right: 20px;
+}
+
+
+.search-container input {
+  margin-right: 10px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+}
+
+.search-container button {
+  padding: 5px 10px;
+  background-color: #87CEFA;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.search-container button:hover {
+  background-color: #87CEFA;
+}

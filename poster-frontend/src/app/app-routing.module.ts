@@ -7,6 +7,7 @@ import { MainLayoutComponent } from "./main-layout/main-layout.component";
 import { PostComponent } from "./post/post.component";
 import { FollowersAndFollowingComponent } from "./followers-and-following/followers-and-following.component";
 import { ChatComponent } from "./chat/chat.component";
+import {SearchComponent} from "./search/search.component";
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -19,7 +20,8 @@ const routes: Routes = [
     {path: 'subscriptions', component: FollowersAndFollowingComponent},
     {path: 'subscriptions/:id', component: FollowersAndFollowingComponent},
     {path: 'chats', component: ChatComponent},
-    { path: 'chats/:userId', component: ChatComponent }
+    {path: 'chats/:userId', component: ChatComponent},
+    {path: 'search/:query', component: SearchComponent}
   ]}
 ];
 
