@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface UserImageRepository extends JpaRepository<UserImage, Long> {
     Optional<UserImage> findByUserId(Long userId);
-    void  deleteUserImageByUserId(Long userId);
+    void  deleteByUserId(Long userId);
 
     @Query(value = """
            SELECT CASE WHEN COUNT(i) > 0 THEN true ELSE false END

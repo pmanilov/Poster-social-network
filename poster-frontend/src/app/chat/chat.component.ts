@@ -8,6 +8,8 @@ import { map } from 'rxjs/operators';
 import {ActivatedRoute} from "@angular/router";
 import {UserModel} from "../models/user.model";
 import {ChatCreateModel} from "../models/chat.create.model";
+import {ImageDataModel} from "../models/image-data.model";
+import {SendMessageModel} from "../models/send-message.model";
 
 
 @Component({
@@ -23,6 +25,7 @@ export class ChatComponent implements OnInit {
   userChats: ChatModel[] = [];
   currentUser: string ='';
   currentUserId: number  = 0;
+  currentUserImage!: ImageDataModel;
   newUserId: number = 0;
   constructor(private route: ActivatedRoute,
               private chatService: ChatService,
@@ -109,12 +112,9 @@ export class ChatComponent implements OnInit {
   }
   sendMessage(): void {
     //TODO: uncomment
-    /*if (this.message.trim() !== '') {
-      const newMessage: MessageModel = {
-        id: 0,
-        date: '',
+    if (this.message.trim() !== '') {
+      const newMessage: SendMessageModel = {
         text: this.message,
-        sender: {id:0, username:'', hasPhoto:false}
       };
 
       this.chatService.sendMessage(this.chatId, newMessage).subscribe(
@@ -126,7 +126,7 @@ export class ChatComponent implements OnInit {
           console.log('Error sending message:', error);
         }
       );
-    }*/
+    }
   }
 
   selectChat(chatId: number): void {
