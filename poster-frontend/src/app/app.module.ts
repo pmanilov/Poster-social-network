@@ -17,6 +17,7 @@ import { CommentService } from "./services/comment.service";
 import { FollowersAndFollowingComponent } from './followers-and-following/followers-and-following.component';
 import { ChatComponent } from './chat/chat.component';
 import { ChatService } from "./services/chat.service";
+import {ImageService} from "./services/image.service";
 import { SearchComponent } from './search/search.component';
 
 @NgModule({
@@ -42,7 +43,8 @@ import { SearchComponent } from './search/search.component';
     PostService,
     AuthService,
     CommentService,
-    ChatService
+    ChatService,
+    ImageService
   ],
   bootstrap: [AppComponent]
 })

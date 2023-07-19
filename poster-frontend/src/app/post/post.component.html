@@ -13,7 +13,7 @@
 <div *ngIf="posts" class="posts">
   <div *ngFor="let post of posts" class="post">
     <div class="post-header">
-      <img [src]=""  alt="User Photo" class="user-photo">
+      <img *ngIf="post.user.hasPhoto" [src]="getImageUrl(post.user.image)"  alt="User Photo" class="user-photo">
       <h2 class="username">{{ post.user.username }}</h2>
     </div>
     <p class="post-text">{{ post.text }}</p>
@@ -26,7 +26,7 @@
     <div *ngIf="post.showComments" class="comments-section">
       <div *ngFor="let comment of post.comments" class="comment">
         <div class="comment-header">
-          <img [src]="" alt="User Photo" class="comment-user-photo">
+          <img *ngIf="comment.user.hasPhoto" [src]="getImageUrl(comment.user.image)" alt="User Photo" class="comment-user-photo">
           <h2 class="comment-username">{{ comment.user.username }}</h2>
         </div>
         <p class="comment-text">{{ comment.text }}</p>

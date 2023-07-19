@@ -4,6 +4,8 @@ import {PostModel} from "../models/post.model";
 import {CommentModel} from "../models/comment.model";
 import {CreateCommentRequestModel} from "../models/create-comment-request.model";
 import {CommentService} from "../services/comment.service";
+import {ImageDataModel} from "../models/image-data.model";
+import {ImageService} from "../services/image.service";
 
 @Component({
   selector: 'app-post',
@@ -17,6 +19,7 @@ export class PostComponent {
   sort: string = 'date'
   constructor(
     private postService: PostService,
+    private imageService: ImageService,
     private commentService: CommentService
   ) {
   }
@@ -31,6 +34,7 @@ export class PostComponent {
           for (const post of this.posts) {
             post.showComments = false;
           }
+          this.setUserPhotos();
         }),
 
         error: (error => {
@@ -38,6 +42,32 @@ export class PostComponent {
         })
       }
     );
+  }
+
+  getImageUrl(image : ImageDataModel): string {
+    if (image) {
+      return 'data:' + image.contentType + ';base64,' + image.imageData;
+    }
+    return '';
+  }
+
+  setUserPhotos() {
+    console.error("SUka ")
+
+    for (const post of this.posts) {
+      console.error("Blia  " + post.id)
+
+      if (post.user.hasPhoto) {
+        this.imageService.getUserImage(post.user.id).subscribe(
+          {
+            next: ((image: ImageDataModel) => {
+              console.error("SUka " + post.user.id)
+              post.user.image = image;
+            })
+          }
+        )
+      }
+    }
   }
 
   getPostsByFollowing(sort: string = "date") {
@@ -56,6 +86,7 @@ export class PostComponent {
       }
     );
   }
+
 
   likePost(post_id: number) {
     this.postService.likePostById(post_id).subscribe(
@@ -88,6 +119,7 @@ export class PostComponent {
       if (post.id == post_id) {
         if (!post.showComments) {
           this.setPostComments(post_id);
+          this.setCommentsPhotos(post);
         } else {
           post.showComments = false;
         }
@@ -105,6 +137,7 @@ export class PostComponent {
             if (post_id == post.id) {
               post.comments = comments;
               post.showComments = true;
+              this.setCommentsPhotos(post);
             }
           }
         }),
@@ -114,6 +147,20 @@ export class PostComponent {
         })
       }
     )
+  }
+
+  setCommentsPhotos(post : PostModel) {
+    for (const comment of post.comments) {
+      if (comment.user.hasPhoto) {
+        this.imageService.getUserImage(comment.user.id).subscribe(
+          {
+            next: ((image: ImageDataModel) => {
+              comment.user.image = image;
+            })
+          }
+        )
+      }
+    }
   }
 
   addComment(post_id: number) {

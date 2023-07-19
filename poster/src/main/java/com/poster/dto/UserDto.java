@@ -15,4 +15,5 @@ public class UserDto {
     private int amountOfFollowers;
     private int amountOfFollowing;
     private int amountOfPosts;
+    private boolean hasPhoto;
 }

@@ -108,12 +108,13 @@ export class ChatComponent implements OnInit {
     );
   }
   sendMessage(): void {
-    if (this.message.trim() !== '') {
+    //TODO: uncomment
+    /*if (this.message.trim() !== '') {
       const newMessage: MessageModel = {
         id: 0,
         date: '',
         text: this.message,
-        sender: {id:0, username:''}
+        sender: {id:0, username:'', hasPhoto:false}
       };
 
       this.chatService.sendMessage(this.chatId, newMessage).subscribe(
@@ -125,7 +126,7 @@ export class ChatComponent implements OnInit {
           console.log('Error sending message:', error);
         }
       );
-    }
+    }*/
   }
 
   selectChat(chatId: number): void {

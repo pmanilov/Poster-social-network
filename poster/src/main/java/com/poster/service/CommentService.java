@@ -86,6 +86,7 @@ public class CommentService {
         return UserShortInfo.builder()
                 .id(user.getId())
                 .username(user.getUsername())
+                .hasPhoto(userService.hasPhoto(user.getId()))
                 .build();
     }
 }

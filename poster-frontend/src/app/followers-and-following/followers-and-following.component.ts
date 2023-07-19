@@ -4,6 +4,8 @@ import {PostModel} from "../models/post.model";
 import {UserService} from "../services/user.service";
 import {UserModel} from "../models/user.model";
 import {ActivatedRoute, Router} from "@angular/router";
+import {ImageDataModel} from "../models/image-data.model";
+import {ImageService} from "../services/image.service";
 
 @Component({
   selector: 'app-followers-and-following',
@@ -20,6 +22,7 @@ export class FollowersAndFollowingComponent implements OnInit{
 
   constructor(
     private userService: UserService,
+    private imageService: ImageService,
     private route: ActivatedRoute,
     private router: Router
   ) {
@@ -38,6 +41,13 @@ export class FollowersAndFollowingComponent implements OnInit{
     }
     this.getUserByToken();
 
+  }
+
+  getImageUrl(image : ImageDataModel): string {
+    if (image) {
+      return 'data:' + image.contentType + ';base64,' + image.imageData;
+    }
+    return '';
   }
 
   getUserById(user_id : string){
@@ -76,6 +86,7 @@ export class FollowersAndFollowingComponent implements OnInit{
       {
         next: ((followers: UserShortInfoModel[]) => {
           this.followers = followers;
+          this.setFollowersPhotos();
         }),
 
         error: (error => {
@@ -90,6 +101,7 @@ export class FollowersAndFollowingComponent implements OnInit{
       {
         next: ((following: UserShortInfoModel[]) => {
           this.following = following;
+          this.setFollowingPhotos();
         }),
 
         error: (error => {
@@ -97,6 +109,34 @@ export class FollowersAndFollowingComponent implements OnInit{
         })
       }
     );
+  }
+
+  setFollowingPhotos() {
+    for (const user of this.following) {
+      if (user.hasPhoto) {
+        this.imageService.getUserImage(user.id).subscribe(
+          {
+            next: ((image: ImageDataModel) => {
+              user.image = image;
+            })
+          }
+        )
+      }
+    }
+  }
+
+  setFollowersPhotos(){
+    for (const follower of this.followers) {
+      if (follower.hasPhoto) {
+        this.imageService.getUserImage(follower.id).subscribe(
+          {
+            next: ((image: ImageDataModel) => {
+              follower.image = image;
+            })
+          }
+        )
+      }
+    }
   }
 
   subscribe(user : UserShortInfoModel) {
