@@ -10,14 +10,14 @@
   <div class="user-list">
     <div *ngIf="selectedTab === 'following'">
       <div *ngFor="let user of following" class="user" (click)="navigateToUserPage(user.id)">
-        <img [src]="" alt="Фото пользователя">
+        <img *ngIf="user.hasPhoto" [src]="getImageUrl(user.image)" alt="Фото пользователя">
         <p>{{ user.username }}</p>
         <button *ngIf="isSubscribed(user.id) && ownerPage" (click)="unsubscribe(user); $event.stopPropagation()" class="unsubscribe-button">Отписаться</button>
       </div>
     </div>
     <div *ngIf="selectedTab === 'followers'">
       <div *ngFor="let user of followers" class="user" (click)="navigateToUserPage(user.id)">
-        <img [src]="" alt="Фото пользователя">
+        <img *ngIf="user.hasPhoto" [src]="getImageUrl(user.image)" alt="Фото пользователя">
         <p>{{ user.username }}</p>
         <button *ngIf="!isSubscribed(user.id) && ownerPage" (click)="subscribe(user); $event.stopPropagation()" class="subscribe-button">Подписаться</button>
         <button *ngIf="isSubscribed(user.id) && ownerPage" (click)="unsubscribe(user); $event.stopPropagation()" class="unsubscribe-button">Отписаться</button>

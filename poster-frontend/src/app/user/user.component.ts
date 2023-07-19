@@ -1,5 +1,5 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {Component, OnInit} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
 import {CookieService} from "ngx-cookie-service";
 import {UserModel} from "../models/user.model";
 import {UserService} from "../services/user.service";
@@ -9,7 +9,8 @@ import {CommentModel} from "../models/comment.model";
 import {CommentService} from "../services/comment.service";
 import {CreateCommentRequestModel} from "../models/create-comment-request.model";
 import {ActivatedRoute, Router} from "@angular/router";
-import {Observable, Subscription} from "rxjs";
+import {ImageService} from "../services/image.service";
+import {ImageDataModel} from "../models/image-data.model";
 
 @Component({
   selector: 'app-user',
@@ -26,6 +27,8 @@ export class UserComponent implements OnInit {
   postText = "";
   selectedFile: File | null = null;
 
+  image!: ImageDataModel;
+
 
   constructor(
     private router: Router,
@@ -34,13 +37,35 @@ export class UserComponent implements OnInit {
     private cookieService: CookieService,
     private userService: UserService,
     private postService: PostService,
-    private commentService: CommentService
+    private commentService: CommentService,
+    private imageService: ImageService
   ) {
   }
 
+
   ngOnInit() {
     this.getUser();
-    this.getUserIdFromUrl()
+    this.getUserIdFromUrl();
+  }
+
+  getImage(user_id : number){
+    this.imageService.getUserImage(user_id).subscribe(
+      {
+        next: ((response : ImageDataModel) => {
+          this.image = response;
+        }),
+        error: (error => {
+          console.error('Error occurred while fetching user image:', error);
+        })
+      }
+    )
+  }
+
+  getImageUrl(image : ImageDataModel): string {
+    if (image) {
+      return 'data:' + image.contentType + ';base64,' + image.imageData;
+    }
+    return '';
   }
 
   getUser() {
@@ -69,6 +94,7 @@ export class UserComponent implements OnInit {
         next: ((user: UserModel) => {
           this.user = user;
           this.getPosts();
+          this.getImage(user.id);
         }),
 
         error: (error => {
@@ -85,6 +111,7 @@ export class UserComponent implements OnInit {
           this.user = user;
           this.getPosts();
           this.isUserSubscribed(user_id)
+          this.getImage(user.id);
         }),
 
         error: (error => {
@@ -210,6 +237,8 @@ export class UserComponent implements OnInit {
     });
   }
 
+
+
   showComments(post_id: number) {
     for (const post of this.posts) {
       if (post.id == post_id) {
@@ -232,6 +261,7 @@ export class UserComponent implements OnInit {
             if (post_id == post.id) {
               post.comments = comments;
               post.showComments = true;
+              this.setCommentsPhotos(post);
             }
           }
         }),
@@ -242,6 +272,21 @@ export class UserComponent implements OnInit {
       }
     )
   }
+
+  setCommentsPhotos(post : PostModel) {
+    for (const comment of post.comments) {
+      if (comment.user.hasPhoto) {
+        this.imageService.getUserImage(comment.user.id).subscribe(
+          {
+            next: ((image: ImageDataModel) => {
+              comment.user.image = image;
+            })
+          }
+        )
+      }
+    }
+  }
+
 
   addComment(post_id: number) {
     let comment: CreateCommentRequestModel = {

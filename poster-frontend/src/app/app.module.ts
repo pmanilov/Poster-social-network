@@ -17,6 +17,7 @@ import { CommentService } from "./services/comment.service";
 import { FollowersAndFollowingComponent } from './followers-and-following/followers-and-following.component';
 import { ChatComponent } from './chat/chat.component';
 import { ChatService } from "./services/chat.service";
+import {ImageService} from "./services/image.service";
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { ChatService } from "./services/chat.service";
     PostService,
     AuthService,
     CommentService,
-    ChatService
+    ChatService,
+    ImageService
   ],
   bootstrap: [AppComponent]
 })

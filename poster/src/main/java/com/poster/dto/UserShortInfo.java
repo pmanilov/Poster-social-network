@@ -10,4 +10,5 @@ import lombok.Setter;
 public class UserShortInfo {
     private Long id;
     private String username;
+    private boolean hasPhoto;
 }
