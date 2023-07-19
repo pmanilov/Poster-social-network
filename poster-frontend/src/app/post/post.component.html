@@ -13,8 +13,10 @@
 <div *ngIf="posts" class="posts">
   <div *ngFor="let post of posts" class="post">
     <div class="post-header">
+      <a [routerLink]="['/profile', post.user.id]">
       <img *ngIf="post.user.hasPhoto" [src]="getImageUrl(post.user.image)"  alt="User Photo" class="user-photo">
       <h2 class="username">{{ post.user.username }}</h2>
+      </a>
     </div>
     <p class="post-text">{{ post.text }}</p>
     <p class="post-date">{{ post.date }}</p>

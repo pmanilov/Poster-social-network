@@ -1,11 +1,13 @@
 <div class="search-container">
-  <h2>Пользователи по запросу:</h2>
+  <h2>Пользователи по запросу: {{ query }}</h2>
   <input type="text" [(ngModel)]="query" (input)="loadSearchUsers()" placeholder="Введите имя пользователя">
   <div class="users-list">
     <div *ngIf="users.length > 0; else noUsers">
       <div class="user-item" *ngFor="let user of users">
-        <img [src]="" alt="Profile Photo" class="profile-photo">
-        <span class="user-username">{{ user.username }}</span>
+        <a [routerLink]="['/profile', user.id]">
+          <img [src]="" alt="Profile Photo" class="profile-photo">
+          <span class="user-username">{{ user.username }}</span>
+        </a>
       </div>
     </div>
     <ng-template #noUsers>
@@ -13,4 +15,3 @@
     </ng-template>
   </div>
 </div>
-
