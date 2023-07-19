@@ -13,7 +13,7 @@ import java.util.Set;
 public class PostDto {
     private Long id;
     private String text;
-    private LocalDateTime date;
+    private String date;
     private UserShortInfo user;
     private Set<UserShortInfo> likedBy;
     private Integer amountOfLikes;

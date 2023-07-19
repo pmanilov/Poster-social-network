@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -24,20 +25,29 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserService userService;
 
-    public List<PostDto> getAllPosts() {
-        return postRepository.findAll().stream().map(this::convertPostToDto).collect(Collectors.toList());
+    public List<PostDto> getAllPosts(String sort) {
+        if(sort.equals("date")) {
+            return postRepository.findAll().stream().map(this::convertPostToDto).collect(Collectors.toList());
+        }
+        else {
+            return postRepository.findAllOrderByLikesCountDesc().stream().map(this::convertPostToDto).collect(Collectors.toList());
+        }
     }
 
     public List<PostDto> getPostByUserId(Long userId) {
-        List<PostDto> postDtos = new ArrayList<>(postRepository.findAllByUserId(userId)
+        List<PostDto> postDtos = new ArrayList<>(postRepository.findAllByUserIdOrderByDateDesc(userId)
                 .stream().map(this::convertPostToDto).toList());
-        Collections.reverse(postDtos);
         return postDtos;
     }
 
-    public List<PostDto> getPostByFollowing(Long userId) {
-        List<Long> following = userService.getFollowedUsers(userId).stream().map(UserShortInfo::getId).collect(Collectors.toList());
-        return postRepository.findPostsByFollowing(following).stream().map(this::convertPostToDto).collect(Collectors.toList());
+    public List<PostDto> getPostByFollowing(String sort) {
+        List<Long> following = userService.getFollowedUsers(userService.getAuthorizedUser().getId()).stream().map(UserShortInfo::getId).collect(Collectors.toList());
+        if(sort.equals("date")) {
+            return postRepository.findPostsByFollowing(following).stream().map(this::convertPostToDto).collect(Collectors.toList());
+        }
+        else {
+            return postRepository.findPostsByFollowingOrderByLikesCountDesc(following).stream().map(this::convertPostToDto).collect(Collectors.toList());
+        }
     }
 
     public PostDto createPost(Post post) {
@@ -108,10 +118,11 @@ public class PostService {
     }
 
     private PostDto convertPostToDto(Post post){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
         return PostDto.builder()
                 .id(post.getId())
                 .text(post.getText())
-                .date(post.getDate())
+                .date(post.getDate().format(formatter))
                 .user(this.convertUserToShortInfo(post.getUser()))
                 .amountOfComments(post.getComments().size())
                 .likedBy(post.getLikedBy().stream().map(this::convertUserToShortInfo).collect(Collectors.toSet()))

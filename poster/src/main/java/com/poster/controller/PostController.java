@@ -19,9 +19,9 @@ public class PostController {
 
     private final PostService postService;
 
-    @GetMapping
-    public ResponseEntity<List<PostDto>> getAllPosts() {
-        return ResponseEntity.ok(postService.getAllPosts());
+    @GetMapping("/")
+    public ResponseEntity<List<PostDto>> getAllPosts(@RequestParam(required = false, defaultValue = "date") String sort) {
+        return ResponseEntity.ok(postService.getAllPosts(sort));
     }
 
     @GetMapping("/{postId}")
@@ -34,9 +34,9 @@ public class PostController {
         return ResponseEntity.ok(postService.getPostByUserId(userId));
     }
 
-    @GetMapping("/following/{userId}")
-    public ResponseEntity<List<PostDto>> getPostByFollowing(@PathVariable Long userId) {
-        return ResponseEntity.ok(postService.getPostByFollowing(userId));
+    @GetMapping("/following")
+    public ResponseEntity<List<PostDto>> getPostByFollowing(@RequestParam(required = false, defaultValue = "date") String sort) {
+        return ResponseEntity.ok(postService.getPostByFollowing(sort));
     }
 
     @PostMapping("/create")

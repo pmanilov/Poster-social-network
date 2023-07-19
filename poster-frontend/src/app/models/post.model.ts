@@ -5,7 +5,7 @@ import {CommentModel} from "./comment.model";
 export interface PostModel {
   id: number;
   text: string;
-  date: Data;
+  date: String;
   amountOfLikes: number;
   amountOfComments: number;
   showComments: boolean;
