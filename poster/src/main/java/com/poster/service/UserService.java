@@ -4,6 +4,7 @@ import com.poster.dto.ImageDto;
 import com.poster.dto.UserDto;
 import com.poster.dto.UserShortInfo;
 import com.poster.exception.ImageNotFoundException;
+import com.poster.exception.UserActionRestrictedException;
 import com.poster.exception.UserNotFoundException;
 import com.poster.model.User;
 import com.poster.model.UserImage;
@@ -118,6 +119,8 @@ public class UserService {
         return userRepository.isUserSubscribed(getAuthorizedUser().getId(), id);
     }
 
+
+    //TODO: add delete photo method
     @Transactional
     public void uploadUserImage(MultipartFile file, Long userId){
         User user;
@@ -128,7 +131,8 @@ public class UserService {
             throw new UserNotFoundException(e.getMessage());
         }
         if (userImageRepository.findByUserId(user.getId()).isPresent()) {
-            userImageRepository.deleteUserImageByUserId(user.getId());
+            userImageRepository.deleteByUserId(user.getId());
+            return;
         }
         try {
             userImageRepository.save(convertFileToImage(file, user));
@@ -173,7 +177,7 @@ public class UserService {
                 .user(user)
                 .build();
     }
-  
+
     public List<UserShortInfo> searchUsers(String partOfName) {
         List<User> users = userRepository.findAll();
         List<UserShortInfo> resultOfSearch = new ArrayList<>();
@@ -183,5 +187,14 @@ public class UserService {
             }
         }
         return resultOfSearch;
+    }
+
+    @Transactional
+    public void deleteUserImage(Long userId) {
+        if (getAuthorizedUser().getId().equals(userId)){
+            userImageRepository.deleteByUserId(userId);
+        } else {
+            throw new UserActionRestrictedException("You can't delete not your photo");
+        }
     }
 }

@@ -27,7 +27,9 @@ export class UserComponent implements OnInit {
   postText = "";
   selectedFile: File | null = null;
 
-  image!: ImageDataModel;
+  image!: ImageDataModel |null;
+  showAddPhoto = false;
+  showDeletePhoto = false;
 
 
   constructor(
@@ -325,6 +327,10 @@ export class UserComponent implements OnInit {
     this.showCreatePost = !this.showCreatePost;
   }
 
+  toggleAddPhoto() {
+    this.showAddPhoto = !this.showAddPhoto
+  }
+
   submitPost() {
     this.postService.createPost(this.postText).subscribe(
       {
@@ -361,6 +367,36 @@ export class UserComponent implements OnInit {
     this.showCreatePost = false;
   }
 
+  onFileSelected(event: any) {
+    this.selectedFile = event.target.files[0] as File;
+  }
+
+  addUserPhoto() {
+    if (this.selectedFile != null){
+      const formData = new FormData();
+      formData.append('image', this.selectedFile);
+
+      this.imageService.uploadUserImage(formData, this.user.id).subscribe(
+        {
+          next: (() => {
+            this.getImage(this.user.id);
+          }),
+
+          error: (error => {
+            console.error('Error occurred while adding user photo:', error);
+          })
+        }
+      )
+
+    }
+    this.showAddPhoto = false;
+  }
+
+  closeAddPhoto() {
+    this.selectedFile = null;
+    this.showAddPhoto = false;
+  }
+
   writeMessage() {
     this.router.navigateByUrl(`/chats/${this.user.id}`);
   }
@@ -375,5 +411,30 @@ export class UserComponent implements OnInit {
 
   navigateToUserPage(id: number) {
     this.router.navigate(["/profile/" + id.toString()])
+  }
+
+  toggleDeletePhoto() {
+    this.showDeletePhoto = !this.showDeletePhoto;
+  }
+
+  deletePhoto() {
+    if (this.image){
+      this.imageService.deleteUserPhoto(this.user.id).subscribe(
+        {
+          next: (() => {
+            this.image = null;
+            this.closeDeletePhoto();
+          }),
+
+          error: (error => {
+            console.error('Error occurred while adding user photo:', error);
+          })
+        }
+      )
+    }
+  }
+
+  closeDeletePhoto() {
+    this.showDeletePhoto = false;
   }
 }

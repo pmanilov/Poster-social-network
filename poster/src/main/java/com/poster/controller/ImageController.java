@@ -28,4 +28,10 @@ public class ImageController {
         userService.uploadUserImage(file, userId);
         return ResponseEntity.ok("");
     }
+
+    @DeleteMapping("/user/{userId}")
+    public ResponseEntity<?> deleteUserImage(@PathVariable Long userId){
+        userService.deleteUserImage(userId);
+        return ResponseEntity.ok("");
+    }
 }

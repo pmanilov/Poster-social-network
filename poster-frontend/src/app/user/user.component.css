@@ -88,7 +88,7 @@
   margin-top: 10px;
 }
 
-.create-post {
+.create-post .add-photo {
   position: relative;
   text-align: center;
 }
@@ -116,7 +116,7 @@
   align-items: center;
 }
 
-.create-post-window {
+.create-post-window, .add-photo-window {
   background-color: #ffffff;
   padding: 20px;
   border-radius: 5px;
@@ -124,6 +124,7 @@
   max-width: 400px;
   width: 100%;
 }
+
 
 .post-textarea {
   width: 100%;

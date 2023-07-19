@@ -19,6 +19,18 @@ export class ImageService {
     return this.http.get<ImageDataModel>(url, this.authService.getAuthorizationHeader());
   }
 
+  uploadUserImage(formData : FormData, user_id : number){
+    const url = this.imageUrl + "user/" + user_id.toString();
+
+    return this.http.post(url, formData, this.authService.getAuthorizationHeader());
+  }
+
+  deleteUserPhoto(user_id : number){
+    const url = this.imageUrl + "user/" + user_id.toString();
+    return this.http.delete(url, this.authService.getAuthorizationHeader());
+
+  }
+
 
 
 

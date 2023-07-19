@@ -1,7 +1,33 @@
 <div class="profile">
   <div *ngIf="user" class="profile-header">
 
-    <img *ngIf="image" [src]="getImageUrl(image)" alt="Profile Photo" class="profile-photo">
+    <div *ngIf="ownerPage" class="add-photo">
+      <button *ngIf="!image" (click)="toggleAddPhoto()" class="create-post-button">Добавить фотографию</button>
+      <div *ngIf="showAddPhoto" class="create-post-overlay">
+        <div class="add-photo-window">
+          <form (ngSubmit)="addUserPhoto()">
+            <input type="file" (change)="onFileSelected($event)" class="post-file-input">
+            <button type="submit" class="post-submit-button">Отправить</button>
+          </form>
+          <button (click)="closeAddPhoto()" class="close-button">Закрыть</button>
+        </div>
+      </div>
+    </div>
+
+    <img *ngIf="image && !ownerPage" [src]="getImageUrl(image)" alt="Profile Photo" class="profile-photo">
+
+    <div *ngIf="ownerPage && image"  class="delete-photo">
+      <img *ngIf="image && ownerPage" (click)="toggleDeletePhoto()" [src]="getImageUrl(image)" alt="Profile Photo" class="profile-photo">
+      <div *ngIf="showDeletePhoto" class="create-post-overlay">
+        <div class="add-photo-window">
+          <button  (click)="deletePhoto()" class="photo-delete-button">Удалить фото</button>
+          <button (click)="closeDeletePhoto()" class="close-button">Закрыть</button>
+        </div>
+      </div>
+    </div>
+
+
+
     <h1 class="username">{{ user.username }}</h1>
     <p class="about">{{ user.about }}</p>
     <div class="followers" (click)="navigateToSubscriptions()">
