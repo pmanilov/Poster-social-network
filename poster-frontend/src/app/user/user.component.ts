@@ -57,7 +57,6 @@ export class UserComponent implements OnInit {
           }),
           error: (error => {
             console.error('Error occurred while trying to ckeck ownership:', error);
-
           })
         }
       )
@@ -319,5 +318,17 @@ export class UserComponent implements OnInit {
 
   writeMessage() {
 
+  }
+
+  navigateToSubscriptions(){
+    if (this.ownerPage){
+      this.router.navigate(["/subscriptions"]);
+    } else {
+      this.router.navigate(["/subscriptions/" + this.user.id.toString()]);
+    }
+  }
+
+  navigateToUserPage(id: number) {
+    this.router.navigate(["/profile/" + id.toString()])
   }
 }

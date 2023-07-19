@@ -3,9 +3,9 @@
     <img [src]="" alt="Profile Photo" class="profile-photo">
     <h1 class="username">{{ user.username }}</h1>
     <p class="about">{{ user.about }}</p>
-    <div class="followers">
-      <span class="count">Followers: <span class="followers-count">{{ user.amountOfFollowers }}</span></span>
-      <span class="count">Following: <span class="following-count">{{ user.amountOfFollowing }}</span></span>
+    <div class="followers" (click)="navigateToSubscriptions()">
+        <span class="count">Подписчики: <span class="followers-count">{{ user.amountOfFollowers }}</span></span>
+        <span class="count">Подписки: <span class="following-count">{{ user.amountOfFollowing }}</span></span>
     </div>
 
     <div *ngIf="ownerPage" class="create-post">
@@ -30,7 +30,7 @@
   <div *ngIf="posts" class="posts">
     <div *ngFor="let post of posts" class="post">
       <div class="post-header">
-        <img [src]=""  alt="User Photo" class="user-photo">
+        <img [src]="" alt="User Photo" class="user-photo">
         <h2 class="username">{{ post.user.username }}</h2>
       </div>
       <p class="post-text">{{ post.text }}</p>
@@ -49,13 +49,13 @@
           <p class="comment-text">{{ comment.text }}</p>
           <p class="comment-date">{{ comment.date }}</p>
         </div>
-        <input [(ngModel)]= newComment class="comment-input" placeholder="Write a comment">
+        <input [(ngModel)]=newComment class="comment-input" placeholder="Write a comment">
         <button (click)="addComment(post.id)" class="comment-submit">Submit</button>
       </div>
     </div>
   </div>
 
- <!-- <div *ngIf="posts.length < 1">
-    <h1>У пользователя пока нет постов((</h1>
-  </div>-->
+  <!-- <div *ngIf="posts.length < 1">
+     <h1>У пользователя пока нет постов((</h1>
+   </div>-->
 </div>
