@@ -5,6 +5,9 @@ import { MessageModel } from '../models/message.model';
 import { interval } from 'rxjs';
 import {UserService} from "../services/user.service";
 import { map } from 'rxjs/operators';
+import {ActivatedRoute} from "@angular/router";
+import {UserModel} from "../models/user.model";
+import {ChatCreateModel} from "../models/chat.create.model";
 
 
 @Component({
@@ -19,25 +22,32 @@ export class ChatComponent implements OnInit {
   message: string = '';
   userChats: ChatModel[] = [];
   currentUser: string ='';
-  constructor(private chatService: ChatService,
+  currentUserId: number  = 0;
+  newUserId: number = 0;
+  constructor(private route: ActivatedRoute,
+              private chatService: ChatService,
               private userService: UserService) { }
 
   ngOnInit(): void {
+    this.route.paramMap.subscribe(params => {
+      if(params.get('userId') != null) {
+        this.newUserId = Number(params.get('userId'));
+      }
+    });
     this.loadUserChats();
-      interval(500).subscribe(() => {
-        if(this.chatId != 0) {
+      interval(300).subscribe(() => {
+        if(this.chatId != 0 || this.newUserId != 0) {
           this.loadChat();
         }
     });
   }
 
   loadUserChats(): void {
-    this.userService.getUserByToken().pipe(
-      map(user => user.username)
-    ).subscribe(
-      (username: string) => {
-        this.currentUser = username;
-        this.loadChatsForUser(username);
+    this.userService.getUserByToken().subscribe(
+      (user: UserModel)  => {
+        this.currentUser = user.username;
+        this.currentUserId = user.id;
+        this.loadChatsForUser();
       },
       (error) => {
         console.log('Error loading user:', error);
@@ -45,7 +55,7 @@ export class ChatComponent implements OnInit {
     );
   }
 
-  loadChatsForUser(username: string): void {
+  loadChatsForUser(): void {
     this.chatService.getAllChats().subscribe(
       (chats: ChatModel[]) => {
         this.userChats = chats.map(chat => ({
@@ -66,6 +76,28 @@ export class ChatComponent implements OnInit {
   }
 
   loadChat(): void {
+    if(this.newUserId != 0) {
+      for (let i = 0; i < this.userChats.length; i++) {
+        let chat = this.userChats[i];
+        if(chat.firstUser.id == this.newUserId || chat.secondUser.id == this.newUserId){
+          this.chatId = chat.id;
+        }
+      }
+      if(this.chatId == 0){
+        let chatCreate : ChatCreateModel = {
+          "firstUserId" : this.currentUserId,
+          "secondUserId" : this.newUserId
+        }
+        this.chatService.createChat(chatCreate).subscribe(
+          (createChat: ChatModel) => {
+            this.chatId = createChat.id;
+            this.loadChatsForUser();
+          },(error) => {
+            console.log('Chat create error:', error);
+          });
+          }
+      this.newUserId = 0;
+      }
     this.chatService.getChatById(this.chatId).subscribe(
       (currentChat: ChatModel) => {
         this.chat = currentChat;
@@ -78,8 +110,8 @@ export class ChatComponent implements OnInit {
   sendMessage(): void {
     if (this.message.trim() !== '') {
       const newMessage: MessageModel = {
-        id: 0, // Используйте нужное значение для id сообщения
-        date: '', // Получение текущей даты и времени
+        id: 0,
+        date: '',
         text: this.message,
         sender: {id:0, username:''}
       };
@@ -87,7 +119,7 @@ export class ChatComponent implements OnInit {
       this.chatService.sendMessage(this.chatId, newMessage).subscribe(
         (chat: ChatModel) => {
           this.chat = chat;
-          this.message = ''; // Очистка поля ввода сообщения после отправки
+          this.message = '';
         },
         (error) => {
           console.log('Error sending message:', error);

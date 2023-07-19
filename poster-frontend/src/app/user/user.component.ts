@@ -317,7 +317,7 @@ export class UserComponent implements OnInit {
   }
 
   writeMessage() {
-
+    this.router.navigateByUrl(`/chats/${this.user.id}`);
   }
 
   navigateToSubscriptions(){

@@ -51,4 +51,9 @@ export class UserService {
     const url = this.apiUrl + "subscribe";
     return this.http.post<any>(url, JSON.stringify(subscribeResponse),  this.authService.getAuthorizationHeaderWithContentType());
   }
+
+  searchUsers(query : string){
+    const url = this.apiUrl + "search?query="+query;
+    return this.http.get<UserShortInfoModel[]>(url, this.authService.getAuthorizationHeader());
+  }
 }

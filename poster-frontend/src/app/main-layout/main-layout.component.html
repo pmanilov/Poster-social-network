@@ -7,6 +7,10 @@
 <div class="main-layout">
   <header class="header">
     <h1>Poster</h1>
+    <div class="search-container">
+      <input type="text" [(ngModel)]="searchQuery" (keyup.enter)="searchUsers()" placeholder="Поиск">
+      <button (click)="searchUsers()">Поиск</button>
+    </div>
   </header>
 
   <div class="content">

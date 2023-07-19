@@ -17,6 +17,7 @@ import { CommentService } from "./services/comment.service";
 import { FollowersAndFollowingComponent } from './followers-and-following/followers-and-following.component';
 import { ChatComponent } from './chat/chat.component';
 import { ChatService } from "./services/chat.service";
+import { SearchComponent } from './search/search.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { ChatService } from "./services/chat.service";
     PostComponent,
     MainLayoutComponent,
     FollowersAndFollowingComponent,
-    ChatComponent
+    ChatComponent,
+    SearchComponent
   ],
   imports: [
     BrowserModule,

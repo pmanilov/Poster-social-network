@@ -9,6 +9,7 @@ import {Router} from "@angular/router";
 })
 export class MainLayoutComponent implements OnInit{
 
+  searchQuery: string = '';
 
   constructor(
     private cookieService: CookieService,
@@ -26,5 +27,9 @@ export class MainLayoutComponent implements OnInit{
 
   openLoginPage(){
     this.router.navigate(["/login"]);
+  }
+
+  searchUsers(){
+    this.router.navigate(["/search/"+this.searchQuery]);
   }
 }
