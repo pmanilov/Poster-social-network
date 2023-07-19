@@ -6,6 +6,7 @@ import com.poster.model.User;
 import com.poster.repository.UserRepository;
 import com.poster.secutiry.model.SecurityUser;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
@@ -52,14 +54,19 @@ public class UserService {
 
     public void followUnfollow(Long targetUserId) {
         User user = getAuthorizedUser();
+        log.info("UserService -> followUnfollow: A user with id = {} attempts to follow/unfollow to a user with id = {}", user.getId(), targetUserId);
         if (user.getId().equals(targetUserId)){
+            log.error("UserService -> followUnfollow: Id's are equals ");
             throw new RuntimeException("Id's are equals. You can't subscribe to yourself!");
         }
         User targetUser = userRepository.findById(targetUserId).orElseThrow(() -> new RuntimeException("Can't find user to subscribe"));
 
         if (userRepository.isUserSubscribed(user.getId(), targetUserId)) {
+            log.info("UserService -> followUnfollow: User with id = {} successfully unfollowed from user with id = {}", user.getId(), targetUserId);
             userRepository.unSubscribe(user.getId(), targetUserId);
         } else {
+            log.info("UserService -> followUnfollow: User with id = {} successfully followed to user with id = {}", user.getId(), targetUserId);
+
             userRepository.addSubscription(user.getId(), targetUser.getId());
         }
     }
