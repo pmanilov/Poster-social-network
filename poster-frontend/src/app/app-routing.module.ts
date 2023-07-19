@@ -18,7 +18,8 @@ const routes: Routes = [
     {path: 'posts', component: PostComponent},
     {path: 'subscriptions', component: FollowersAndFollowingComponent},
     {path: 'subscriptions/:id', component: FollowersAndFollowingComponent},
-    {path: 'chats', component: ChatComponent}
+    {path: 'chats', component: ChatComponent},
+    { path: 'chats/:userId', component: ChatComponent }
   ]}
 ];
 
